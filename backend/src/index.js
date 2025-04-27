@@ -1,17 +1,17 @@
 const express = require('express');
 const swaggerJsdoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
-const pegawaiRoutes = require('./routes/pegawaiRoutes'); // Pastikan ini adalah path yang benar
+const pegawaiRoutes = require('./routes/pegawaiRoutes'); //path pegawaiRoutes.js
 
 const app = express();
 
-// Definisi Swagger
+
 const swaggerDefinition = {
   openapi: '3.0.0',
   info: {
-    title: 'SIMPADU API Documentation',
+    title: 'Dokumentasi API Simpadu',
     version: '1.0.0',
-    description: 'API documentation for Simpadu backend',
+    description: 'Dokumentasi API Simpadu untuk 2 level user',
   },
   servers: [
     {

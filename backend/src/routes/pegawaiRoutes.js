@@ -6,11 +6,11 @@ const pegawaiController = require('../controllers/pegawaiController');
  * @swagger
  * /api/pegawai:
  *   get:
- *     summary: Get all employees
+ *     summary: Ambil semua daftar pegawai
  *     tags: [Pegawai]
  *     responses:
  *       200:
- *         description: Successfully retrieved list of employees
+ *         description: Berhasil mengambil daftar pegawai
  */
 router.get('/pegawai', pegawaiController.getAllPegawai);
 
@@ -18,7 +18,7 @@ router.get('/pegawai', pegawaiController.getAllPegawai);
  * @swagger
  * /api/pegawai/{id}:
  *   get:
- *     summary: Get a single employee by ID
+ *     summary: Ambil satu data pegawai berdasarkan ID
  *     tags: [Pegawai]
  *     parameters:
  *       - in: path
@@ -26,10 +26,10 @@ router.get('/pegawai', pegawaiController.getAllPegawai);
  *         required: true
  *         schema:
  *           type: string
- *         description: ID of the employee
+ *         description: ID dari pegawai
  *     responses:
  *       200:
- *         description: Successfully retrieved employee
+ *         description: Berhasil mengambil data pegawai
  */
 router.get('/pegawai/:id', pegawaiController.getPegawaiById);
 
@@ -37,7 +37,7 @@ router.get('/pegawai/:id', pegawaiController.getPegawaiById);
  * @swagger
  * /api/pegawai:
  *   post:
- *     summary: Create a new employee
+ *     summary: Tambah pegawai baru
  *     tags: [Pegawai]
  *     requestBody:
  *       required: true
@@ -48,16 +48,16 @@ router.get('/pegawai/:id', pegawaiController.getPegawaiById);
  *             properties:
  *               nama:
  *                 type: string
- *                 description: Name of the employee
+ *                 description: Nama Pegawai
  *               email:
  *                 type: string
- *                 description: Email of the employee
+ *                 description: Email Pegawai
  *               jabatan:
  *                 type: string
- *                 description: Job position of the employee
+ *                 description: Jabatan Pegawai
  *     responses:
  *       201:
- *         description: Successfully created employee
+ *         description: Berhasil menambah pegawai 
  */
 router.post('/pegawai', pegawaiController.createPegawai);
 
@@ -65,7 +65,7 @@ router.post('/pegawai', pegawaiController.createPegawai);
  * @swagger
  * /api/pegawai/{id}:
  *   put:
- *     summary: Update an existing employee by ID
+ *     summary: memperbarui data pegawai berdasarkan ID
  *     tags: [Pegawai]
  *     parameters:
  *       - in: path
@@ -73,7 +73,7 @@ router.post('/pegawai', pegawaiController.createPegawai);
  *         required: true
  *         schema:
  *           type: string
- *         description: ID of the employee to be updated
+ *         description: ID pegawai yang bakal diupdate
  *     requestBody:
  *       required: true
  *       content:
@@ -83,16 +83,16 @@ router.post('/pegawai', pegawaiController.createPegawai);
  *             properties:
  *               nama:
  *                 type: string
- *                 description: Name of the employee
+ *                 description: Nama pegawai
  *               email:
  *                 type: string
- *                 description: Email of the employee
+ *                 description: Email pegawai
  *               jabatan:
  *                 type: string
- *                 description: Job position of the employee
+ *                 description: Posisi pegawai
  *     responses:
  *       200:
- *         description: Successfully updated employee
+ *         description: Berhasil memperbarui data pegawai
  */
 router.put('/pegawai/:id', pegawaiController.updatePegawai);
 
@@ -100,7 +100,7 @@ router.put('/pegawai/:id', pegawaiController.updatePegawai);
  * @swagger
  * /api/pegawai/{id}:
  *   delete:
- *     summary: Delete an employee by ID
+ *     summary: Menghapus pegawai berdasarkan ID
  *     tags: [Pegawai]
  *     parameters:
  *       - in: path
@@ -108,10 +108,10 @@ router.put('/pegawai/:id', pegawaiController.updatePegawai);
  *         required: true
  *         schema:
  *           type: string
- *         description: ID of the employee to be deleted
+ *         description: ID pegawai yang bakal dihapus
  *     responses:
  *       200:
- *         description: Successfully deleted employee
+ *         description: Berhasil menghapus pegawai
  */
 router.delete('/pegawai/:id', pegawaiController.deletePegawai);
 
