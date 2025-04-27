@@ -1,0 +1,94 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model simpeg_pegawai {
+  id_pegawai    Int          @id @default(autoincrement()) @db.SmallInt
+  nama_pegawai  String?      @db.VarChar(60)
+  panggilan     String       @db.VarChar(150)
+  jk            String       @db.Char(1)
+  tempat_lahir  String?      @db.VarChar(40)
+  nama_ibu      String?      @db.VarChar(60)
+  tgl_lahir     DateTime?    @db.Date
+  nip_lama      String?      @db.VarChar(25)
+  nip_baru      String       @unique(map: "nip_baru") @db.VarChar(50)
+  alamat        String       @db.VarChar(255)
+  kota          String?      @db.VarChar(100)
+  kode_pos      String       @db.VarChar(6)
+  telpon        String       @db.VarChar(13)
+  handphone     String       @default("") @db.VarChar(20)
+  email         String       @db.VarChar(255)
+  email_poliban String       @unique(map: "email_poliban") @db.VarChar(100)
+  website       String       @db.VarChar(30)
+  siap_dosen    siap_dosen[]
+}
+
+model siap_dosen {
+  id_dosen       Int            @id @default(autoincrement())
+  id_kelas_mk    Int
+  id_pegawai     Int            @db.SmallInt
+  siap_kelas_mk  siap_kelas_mk  @relation(fields: [id_kelas_mk], references: [id_kelas_mk], onUpdate: Restrict, map: "siap_dosen_ibfk_1")
+  simpeg_pegawai simpeg_pegawai @relation(fields: [id_pegawai], references: [id_pegawai], onUpdate: Restrict, map: "siap_dosen_ibfk_2")
+
+  @@index([id_kelas_mk, id_pegawai], map: "dosen_kelas_pegawai")
+  @@index([id_pegawai], map: "id_pegawai")
+}
+
+model siap_kelas {
+  id_kelas      Int             @id @default(autoincrement())
+  nama_kelas    String          @db.VarChar(50)
+  tahun_ajaran  String          @db.VarChar(9)
+  siap_kelas_mk siap_kelas_mk[]
+  siap_mhs      siap_mhs[]
+}
+
+model siap_kelas_mk {
+  id_kelas_mk       Int                 @id @default(autoincrement())
+  id_kelas          Int
+  id_mk             Int
+  siap_dosen        siap_dosen[]
+  siap_kelas        siap_kelas          @relation(fields: [id_kelas], references: [id_kelas], onUpdate: Restrict, map: "siap_kelas_mk_ibfk_1")
+  siap_mk           siap_mk             @relation(fields: [id_mk], references: [id_mk], onUpdate: Restrict, map: "siap_kelas_mk_ibfk_2")
+  siap_presensi_mhs siap_presensi_mhs[]
+
+  @@index([id_kelas], map: "id_kelas")
+  @@index([id_mk], map: "id_mk")
+}
+
+model siap_mhs {
+  id_mhs            Int                 @id @default(autoincrement())
+  nim               String              @db.VarChar(20)
+  nama_mhs          String              @db.VarChar(100)
+  id_kelas          Int
+  siap_kelas        siap_kelas          @relation(fields: [id_kelas], references: [id_kelas], onUpdate: Restrict, map: "siap_mhs_ibfk_1")
+  siap_presensi_mhs siap_presensi_mhs[]
+
+  @@index([id_kelas], map: "id_kelas")
+}
+
+model siap_mk {
+  id_mk         Int             @id @default(autoincrement())
+  nama_mk       String          @db.VarChar(100)
+  kode_mk       String          @db.VarChar(10)
+  sks           Int             @default(3)
+  siap_kelas_mk siap_kelas_mk[]
+}
+
+model siap_presensi_mhs {
+  id_presensi_mhs Int           @id @default(autoincrement())
+  id_mhs          Int
+  id_kelas_mk     Int
+  id_pertemuan    Int
+  status          Boolean
+  tanggal         DateTime      @default(now()) @db.DateTime(0)
+  siap_mhs        siap_mhs      @relation(fields: [id_mhs], references: [id_mhs], onUpdate: Restrict, map: "siap_presensi_mhs_ibfk_1")
+  siap_kelas_mk   siap_kelas_mk @relation(fields: [id_kelas_mk], references: [id_kelas_mk], onUpdate: Restrict, map: "siap_presensi_mhs_ibfk_2")
+
+  @@index([id_kelas_mk], map: "id_kelas_mk")
+  @@index([id_mhs], map: "id_mhs")
+}
