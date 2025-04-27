@@ -46,7 +46,8 @@ const Main = () => {
   }, []);
   return <Fragment>
       <Helmet>
-        <title>SIMPADU - {menuItem?.title}</title>
+         {/* Apabila tidak ada title di menu, maka title default adalah SIMPADU */}
+        <title>{menuItem?.title ? `${menuItem.title} | SIMPADU` : 'SIMPADU'}</title>
       </Helmet>
 
       <Sidebar />

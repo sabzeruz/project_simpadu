@@ -5,6 +5,8 @@ const pegawaiRoutes = require('./routes/pegawaiRoutes'); //path pegawaiRoutes.js
 
 const app = express();
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 const swaggerDefinition = {
   openapi: '3.0.0',

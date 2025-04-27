@@ -25,10 +25,47 @@ exports.getPegawaiById = async (req, res) => {
 
 exports.createPegawai = async (req, res) => {
   try {
+    const {
+      nama_pegawai,
+      panggilan,
+      jk,
+      tempat_lahir,
+      nama_ibu,
+      tgl_lahir,
+      nip_lama,
+      nip_baru,
+      alamat,
+      kota,
+      kode_pos,
+      telpon,
+      handphone,
+      email,
+      email_poliban,
+      website
+    } = req.body;
+
     const newPegawai = await prisma.simpeg_pegawai.create({
-      data: req.body,
+      data: {
+        nama_pegawai,
+        panggilan,
+        jk,
+        tempat_lahir,
+        nama_ibu,
+        tgl_lahir: tgl_lahir ? new Date(tgl_lahir) : null,
+        nip_lama,
+        nip_baru,
+        alamat,
+        kota,
+        kode_pos,
+        telpon,
+        handphone,
+        email,
+        email_poliban,
+        website
+      }
     });
-    res.json(newPegawai);
+
+    res.status(201).json(newPegawai);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -37,10 +74,47 @@ exports.createPegawai = async (req, res) => {
 exports.updatePegawai = async (req, res) => {
   const { id } = req.params;
   try {
+    const {
+      nama_pegawai,
+      panggilan,
+      jk,
+      tempat_lahir,
+      nama_ibu,
+      tgl_lahir,
+      nip_lama,
+      nip_baru,
+      alamat,
+      kota,
+      kode_pos,
+      telpon,
+      handphone,
+      email,
+      email_poliban,
+      website
+    } = req.body;
+
     const updatedPegawai = await prisma.simpeg_pegawai.update({
       where: { id_pegawai: parseInt(id) },
-      data: req.body,
+      data: {
+        nama_pegawai,
+        panggilan,
+        jk,
+        tempat_lahir,
+        nama_ibu,
+        tgl_lahir: tgl_lahir ? new Date(tgl_lahir) : undefined,
+        nip_lama,
+        nip_baru,
+        alamat,
+        kota,
+        kode_pos,
+        telpon,
+        handphone,
+        email,
+        email_poliban,
+        website
+      }
     });
+
     res.json(updatedPegawai);
   } catch (err) {
     res.status(500).json({ error: err.message });

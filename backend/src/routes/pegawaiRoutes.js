@@ -4,6 +4,15 @@ const pegawaiController = require('../controllers/pegawaiController');
 
 /**
  * @swagger
+ * tags:
+ *   - name: Pegawai
+ *     description: Manajemen data pegawai
+ *   - name: Presensi Dosen
+ *     description: Manajemen presensi dosen
+ */
+
+/**
+ * @swagger
  * /api/pegawai:
  *   get:
  *     summary: Ambil semua daftar pegawai
@@ -46,18 +55,58 @@ router.get('/pegawai/:id', pegawaiController.getPegawaiById);
  *           schema:
  *             type: object
  *             properties:
- *               nama:
+ *               nama_pegawai:
  *                 type: string
  *                 description: Nama Pegawai
+ *               panggilan:
+ *                 type: string
+ *                 description: Nama panggilan pegawai
+ *               jk:
+ *                 type: string
+ *                 description: Jenis kelamin (L/P)
+ *               tempat_lahir:
+ *                 type: string
+ *                 description: Tempat lahir pegawai
+ *               nama_ibu:
+ *                 type: string
+ *                 description: Nama ibu kandung pegawai
+ *               tgl_lahir:
+ *                 type: string
+ *                 format: date
+ *                 description: Tanggal lahir pegawai
+ *               nip_lama:
+ *                 type: string
+ *                 description: NIP lama pegawai
+ *               nip_baru:
+ *                 type: string
+ *                 description: NIP baru pegawai
+ *               alamat:
+ *                 type: string
+ *                 description: Alamat lengkap pegawai
+ *               kota:
+ *                 type: string
+ *                 description: Kota domisili pegawai
+ *               kode_pos:
+ *                 type: string
+ *                 description: Kode pos
+ *               telpon:
+ *                 type: string
+ *                 description: Nomor telepon rumah
+ *               handphone:
+ *                 type: string
+ *                 description: Nomor handphone
  *               email:
  *                 type: string
- *                 description: Email Pegawai
- *               jabatan:
+ *                 description: Email pribadi pegawai
+ *               email_poliban:
  *                 type: string
- *                 description: Jabatan Pegawai
+ *                 description: Email Poliban pegawai
+ *               website:
+ *                 type: string
+ *                 description: Website pribadi pegawai
  *     responses:
  *       201:
- *         description: Berhasil menambah pegawai 
+ *         description: Berhasil menambah pegawai
  */
 router.post('/pegawai', pegawaiController.createPegawai);
 
@@ -65,7 +114,7 @@ router.post('/pegawai', pegawaiController.createPegawai);
  * @swagger
  * /api/pegawai/{id}:
  *   put:
- *     summary: memperbarui data pegawai berdasarkan ID
+ *     summary: Perbarui data pegawai berdasarkan ID
  *     tags: [Pegawai]
  *     parameters:
  *       - in: path
@@ -73,7 +122,7 @@ router.post('/pegawai', pegawaiController.createPegawai);
  *         required: true
  *         schema:
  *           type: string
- *         description: ID pegawai yang bakal diupdate
+ *         description: ID pegawai yang akan diperbarui
  *     requestBody:
  *       required: true
  *       content:
@@ -81,15 +130,39 @@ router.post('/pegawai', pegawaiController.createPegawai);
  *           schema:
  *             type: object
  *             properties:
- *               nama:
+ *               nama_pegawai:
  *                 type: string
- *                 description: Nama pegawai
+ *               panggilan:
+ *                 type: string
+ *               jk:
+ *                 type: string
+ *               tempat_lahir:
+ *                 type: string
+ *               nama_ibu:
+ *                 type: string
+ *               tgl_lahir:
+ *                 type: string
+ *                 format: date
+ *               nip_lama:
+ *                 type: string
+ *               nip_baru:
+ *                 type: string
+ *               alamat:
+ *                 type: string
+ *               kota:
+ *                 type: string
+ *               kode_pos:
+ *                 type: string
+ *               telpon:
+ *                 type: string
+ *               handphone:
+ *                 type: string
  *               email:
  *                 type: string
- *                 description: Email pegawai
- *               jabatan:
+ *               email_poliban:
  *                 type: string
- *                 description: Posisi pegawai
+ *               website:
+ *                 type: string
  *     responses:
  *       200:
  *         description: Berhasil memperbarui data pegawai
@@ -100,7 +173,7 @@ router.put('/pegawai/:id', pegawaiController.updatePegawai);
  * @swagger
  * /api/pegawai/{id}:
  *   delete:
- *     summary: Menghapus pegawai berdasarkan ID
+ *     summary: Hapus data pegawai berdasarkan ID
  *     tags: [Pegawai]
  *     parameters:
  *       - in: path
@@ -108,7 +181,7 @@ router.put('/pegawai/:id', pegawaiController.updatePegawai);
  *         required: true
  *         schema:
  *           type: string
- *         description: ID pegawai yang bakal dihapus
+ *         description: ID pegawai yang akan dihapus
  *     responses:
  *       200:
  *         description: Berhasil menghapus pegawai
@@ -119,7 +192,7 @@ router.delete('/pegawai/:id', pegawaiController.deletePegawai);
  * @swagger
  * /api/presensi-dosen:
  *   post:
- *     summary: Record lecturer attendance
+ *     summary: Rekam presensi dosen
  *     tags: [Presensi Dosen]
  *     requestBody:
  *       required: true
@@ -130,14 +203,14 @@ router.delete('/pegawai/:id', pegawaiController.deletePegawai);
  *             properties:
  *               dosen_id:
  *                 type: string
- *                 description: ID of the lecturer
+ *                 description: ID dosen
  *               waktu_presensi:
  *                 type: string
  *                 format: date-time
- *                 description: Time of attendance
+ *                 description: Waktu presensi
  *     responses:
  *       201:
- *         description: Successfully recorded lecturer attendance
+ *         description: Berhasil merekam presensi dosen
  */
 router.post('/presensi-dosen', pegawaiController.presensiDosen);
 
