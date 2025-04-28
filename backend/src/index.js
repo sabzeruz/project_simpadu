@@ -17,21 +17,21 @@ const swaggerDefinition = {
   },
   servers: [
     {
-      url: 'http://localhost:3000', // Server yang digunakan
+      url: 'http://localhost:3000',
     },
   ],
 };
 
-// Opsi untuk swagger-jsdoc
+//swagger-jsdoc
 const options = {
   swaggerDefinition,
-  apis: ['./src/routes/pegawaiRoutes.js'], // Pastikan ini sesuai dengan path file rute kamu
+  apis: ['./src/routes/pegawaiRoutes.js'], 
 };
 
 // Inisialisasi swagger-jsdoc
 const swaggerSpec = swaggerJsdoc(options);
 
-// Menyajikan Swagger UI di /api-docs
+//  Swagger UI di /api-docs
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Menyambungkan rute API
