@@ -8,6 +8,7 @@ import { addDays, format } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { KeenIcon } from '@/components/keenicons';
 import { Breadcrumbs } from '@/layouts/demo1/breadcrumbs';
+import EditAccountRequests from '@/components/kostum-simpadu/EditAccountRequests';
 
 const Demo1LightSidebarPage = () => {
   return <Fragment>
@@ -19,6 +20,7 @@ const Demo1LightSidebarPage = () => {
       </Container>
       <Container>
         <Demo1LightSidebarContent />
+        <EditAccountRequests />
       </Container>
     </Fragment>;
 };
