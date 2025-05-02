@@ -59,6 +59,11 @@ const Login = () => {
           </h3>
         </div>
 
+        <Alert variant="primary">
+          Dalam tahap pengembangan. Gunakan Username <span className="font-semibold text-gray-900">iqbal</span> username dan{' '}
+          <span className="font-semibold text-gray-900">iqbal</span> sebagai password.
+        </Alert>
+
         {formik.status && <Alert variant="danger">{formik.status}</Alert>}
 
         <div className="flex flex-col gap-1">
