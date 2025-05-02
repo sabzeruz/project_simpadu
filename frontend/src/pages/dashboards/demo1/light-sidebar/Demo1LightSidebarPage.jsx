@@ -20,7 +20,12 @@ const Demo1LightSidebarPage = () => {
       </Container>
       <Container>
         <Demo1LightSidebarContent />
+ 
+        <Container className="mt-5">
         <EditAccountRequests />
+        </Container>
+        
+        
       </Container>
     </Fragment>;
 };

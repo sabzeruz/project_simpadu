@@ -7,7 +7,10 @@ export const LOGIN_URL = `${API_URL}/login`;
 export const REGISTER_URL = `${API_URL}/register`;
 export const FORGOT_PASSWORD_URL = `${API_URL}/forgot-password`;
 export const RESET_PASSWORD_URL = `${API_URL}/reset-password`;
-export const GET_USER_URL = `${API_URL}/user`;
+
+
+export const GET_USER_URL = `${API_URL}/profile`;
+export const GET_USER_BY_ID_URL = `${API_URL}/profile/:id`;
 const AuthContext = createContext(null);
 const AuthProvider = ({
   children
@@ -36,24 +39,25 @@ const AuthProvider = ({
       authHelper.removeAuth();
     }
   };
-  const login = async (email, password) => {
+  const login = async (username, password) => {
     try {
-      const {
-        data: auth
-      } = await axios.post(LOGIN_URL, {
-        email,
-        password
+      const { data } = await axios.post(LOGIN_URL, {
+        username,
+        password,
       });
-      saveAuth(auth);
-      const {
-        data: user
-      } = await getUser();
+  
+      // Simpan token dengan format yang sesuai helper
+      saveAuth({ token: data.token });
+  
+      const { data: user } = await getUser();
       setCurrentUser(user);
     } catch (error) {
       saveAuth(undefined);
-      throw new Error(`Error ${error}`);
+      throw new Error(error.response?.data?.message || 'Login gagal');
     }
   };
+  
+  
   const register = async (email, password, password_confirmation) => {
     try {
       const {
@@ -87,8 +91,14 @@ const AuthProvider = ({
     });
   };
   const getUser = async () => {
-    return await axios.get(GET_USER_URL);
+    const token = authHelper.getAuth()?.token;
+    return await axios.get(GET_USER_URL, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
   };
+  
   const logout = () => {
     saveAuth(undefined);
     setCurrentUser(undefined);
