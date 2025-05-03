@@ -9,6 +9,8 @@ import { cn } from '@/lib/utils';
 import { KeenIcon } from '@/components/keenicons';
 import { Breadcrumbs } from '@/layouts/demo1/breadcrumbs';
 import { ToolbarBreadcrumbs } from '../../../layouts/demo1/toolbar/ToolbarBreadcrumbs';
+import  DatapegawaiTable  from '@/components/kostum-simpadu/DatapegawaiTable';  
+
 const PendataanPegawaiPage = () => {
   return <Fragment>
       <Container>
@@ -16,8 +18,8 @@ const PendataanPegawaiPage = () => {
           <ToolbarHeading title="Data Pegawai" description="Pendataan Pegawai Politeknik Negeri Banjarmasin saat ini." />
          {/* <ToolbarBreadcrumbs /> */}
         </Toolbar>
+      < DatapegawaiTable />
       </Container>
-
       {/* <Container>
         <Demo1LightSidebarContent />
       </Container> */}
