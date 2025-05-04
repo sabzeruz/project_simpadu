@@ -35,25 +35,17 @@ const DataPegawaiTable = () => {
       cell: ({ row }) => (
         <div className="flex gap-2">
           <button className="
-          dark:bg-blue-500 
-          dark:text-white 
-          dark:hover:bg-blue-700 
-          bg-blue-500
-          text-white
-          text-xs px-3 py-1.5 rounded
-           hover:bg-blue-700
-            hover:text-white
-            transition">✏️ Edit</button>
+            dark:bg-blue-500 dark:text-white dark:hover:bg-blue-700 
+            bg-blue-500 text-white text-xs px-3 py-1.5 rounded 
+            hover:bg-blue-700 hover:text-white transition">
+            ✏️ Edit
+          </button>
           <button className="
-          dark:bg-red-500
-           dark:text-white 
-           bg-red-500
-           text-white
-           text-xs px-3 py-1.5 rounded
-            hover:text-white
-           hover:bg-red-700
-             dark:hover:bg-red-700
-              transition">🗑️ Hapus</button>
+            dark:bg-red-500 dark:text-white dark:hover:bg-red-700 
+            bg-red-500 text-white text-xs px-3 py-1.5 rounded 
+            hover:bg-red-700 hover:text-white transition">
+            🗑️ Hapus
+          </button>
         </div>
       ),
     },
@@ -61,29 +53,29 @@ const DataPegawaiTable = () => {
 
   return (
     <div className="shadow-sm p-7 bg-inherit rounded-md">
-      <div className="flex justify-between items-center mb-4">
-        <button className="bg-green-500 text-white dark:bg-white dark:text-black 
-        dark:hover:bg-green-600 
-        dark:hover:text-white 
-        text-sm px-4 py-2 rounded 
-        hover:bg-green-600 
-        transition">
+      {/* Top bar responsif */}
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 mb-4">
+        <button className="w-full sm:w-auto bg-green-500 text-white dark:bg-white dark:text-black 
+          dark:hover:bg-green-600 dark:hover:text-white 
+          text-sm px-4 py-2 rounded hover:bg-green-600 transition">
           ➕ Tambah Data Pegawai
         </button>
         <Input
           placeholder="🔍 Cari..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-64 h-9"
+          className="w-full sm:w-64 h-9"
         />
       </div>
-      <DataGrid
-        data={filteredData}
-        columns={columns}
-        pagination={{
-          size: 10,
-        }}
-      />
+
+      {/* Table responsif */}
+      <div className="overflow-x-auto">
+        <DataGrid
+          data={filteredData}
+          columns={columns}
+          pagination={{ size: 10 }}
+        />
+      </div>
     </div>
   );
 };
