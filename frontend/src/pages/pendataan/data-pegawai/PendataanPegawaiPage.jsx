@@ -18,7 +18,9 @@ const PendataanPegawaiPage = () => {
           <ToolbarHeading title="Data Pegawai" description="Pendataan Pegawai Politeknik Negeri Banjarmasin saat ini." />
          {/* <ToolbarBreadcrumbs /> */}
         </Toolbar>
-      < DatapegawaiTable />
+            <Container>
+                < DatapegawaiTable />
+            </Container>
       </Container>
       {/* <Container>
         <Demo1LightSidebarContent />
