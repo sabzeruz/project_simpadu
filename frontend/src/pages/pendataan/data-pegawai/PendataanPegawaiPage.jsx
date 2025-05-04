@@ -9,7 +9,7 @@ import { cn } from '@/lib/utils';
 import { KeenIcon } from '@/components/keenicons';
 import { Breadcrumbs } from '@/layouts/demo1/breadcrumbs';
 import { ToolbarBreadcrumbs } from '../../../layouts/demo1/toolbar/ToolbarBreadcrumbs';
-import  DatapegawaiTable  from '@/components/kostum-simpadu/DatapegawaiTable';  
+import  DatapegawaiTable  from '@/components/kostum-simpadu/DataPegawaiTable';  
 
 const PendataanPegawaiPage = () => {
   return <Fragment>
