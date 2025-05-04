@@ -16,7 +16,7 @@ app.use(express.urlencoded({ extended: true }));
 const allowedOrigins = [
   'http://localhost:5173',
   'https://simpadu.vercel.app',
-  'https://84f6-2001-448a-60c0-1d7f-f50d-b0a9-5620-9e9d.ngrok-free.app/'
+  'https://116f-2001-448a-60c0-a12d-8069-d9ec-8ac9-24ec.ngrok-free.app'
 ];
 
 app.use(cors({

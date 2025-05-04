@@ -24,10 +24,26 @@ const EditAccountRequests = () => {
       header: "Aksi",
       cell: ({ row }) => (
         <div className="flex gap-2">
-          <button className="bg-black  text-white  dark:text-white text-xs px-3 py-1.5 rounded hover:bg-blue-500 hover:text-white hover dark:hover:bg-blue-500 transition">
+          <button className=" dark:bg-blue-500 
+          dark:text-white 
+          dark:hover:bg-blue-700 
+          bg-blue-500
+          text-white
+          text-xs px-3 py-1.5 rounded
+           hover:bg-blue-700
+            hover:text-white
+            transition">
             👁️ Tinjau
           </button>
-          <button className=" bg-black  text-white text-xs px-3 py-1.5 rounded hover:bg-red-700 hover:text-white dark:hover:bg-red-700 transition">
+          <button className=" dark:bg-red-500
+           dark:text-white 
+           bg-red-500
+           text-white
+           text-xs px-3 py-1.5 rounded
+            hover:text-white
+           hover:bg-red-700
+             dark:hover:bg-red-700
+              transition">
             🗑️ Hapus
           </button>
         </div>
