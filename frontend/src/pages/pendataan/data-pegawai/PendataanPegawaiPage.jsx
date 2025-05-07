@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { Fragment, useState } from 'react';
 import { Container } from '@/components/container';
 import { Toolbar, ToolbarActions, ToolbarHeading } from '@/layouts/demo1/toolbar';

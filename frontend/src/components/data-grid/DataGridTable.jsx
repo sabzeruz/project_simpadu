@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { DataGridEmpty } from '.';
 import { flexRender } from '@tanstack/react-table';
 import { useDataGrid } from '.';
