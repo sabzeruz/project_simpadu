@@ -9,7 +9,9 @@ import { addDays, format } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { KeenIcon } from '@/components/keenicons';
 import { Breadcrumbs } from '@/layouts/demo1/breadcrumbs';
-import EditAccountRequests from '@/components/kostum-simpadu/EditAccountRequests';
+import EditAccountRequests from '@/components/kostum-simpadu/Dashboard/EditAccountRequests';
+import LogPresensiMasuk from "@/components/kostum-simpadu/Dashboard/LogPresensiMasuk";
+import LogPresensiPulang from "@/components/kostum-simpadu/Dashboard/LogPresensiPulang";
 
 const Demo1LightSidebarPage = () => {
   return <Fragment>
@@ -21,8 +23,11 @@ const Demo1LightSidebarPage = () => {
       </Container>
       <Container>
         <Demo1LightSidebarContent />
- 
         <Container className="mt-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <LogPresensiMasuk />
+        <LogPresensiPulang />
+        </div>
         <EditAccountRequests />
         </Container>
         
