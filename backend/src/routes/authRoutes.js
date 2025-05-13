@@ -1,10 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const Controller = require('../controllers/authController');
+const authController = require('../controllers/authController');
+const { verifyToken } = require('../middlewares/auth');
 
-router.post('/login', Controller.login); // Import the authController
-router.get('/get', Controller.getAllUsers);
-router.get('/profile', Controller.getSuperAdminProfile);
-// Import the authController
+// Login route
+router.post('/login', authController.login);
+
+// Profile route
+router.get('/profile', verifyToken, authController.profile);
 
 module.exports = router;

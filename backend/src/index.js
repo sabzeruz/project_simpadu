@@ -1,58 +1,35 @@
-const express = require('express');
-const swaggerJsdoc = require('swagger-jsdoc');
-const swaggerUi = require('swagger-ui-express');
-const cors = require('cors');
 require('dotenv').config();
-
-const pegawaiRoutes = require('./routes/pegawaiRoutes');
+const express = require('express');
+const cors = require('cors');
 const authRoutes = require('./routes/authRoutes');
+const pegawaiRoutes = require('./routes/pegawaiRoutes');
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('../swagger.json');
+
+// ... existing code ...
 
 const app = express();
 
+
+// Middleware
+app.use(cors());
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
-// CORS: agar bisa diakses lokal & dari Vercel
-const allowedOrigins = [
-  'http://localhost:5173',
-  'https://simpadu.vercel.app',
-];
+// Swagger UI
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-app.use(cors({
-  origin: allowedOrigins,
-  credentials: true,
-}));
+// Routes
+app.use('/api/auth', authRoutes);
+app.use('/api/pegawai', pegawaiRoutes);
 
-// Swagger config
-const PORT = process.env.PORT || 3000;
-const swaggerDefinition = {
-  openapi: '3.0.0',
-  info: {
-    title: 'Dokumentasi API Simpadu',
-    version: '1.0.0',
-    description: 'Dokumentasi API Simpadu untuk 2 level user',
-  },
-  servers: [
-    {
-      url: process.env.BASE_URL || `http://localhost:${PORT}`,
-    },
-  ],
-};
-
-const options = {
-  swaggerDefinition,
-  apis: ['./src/routes/pegawaiRoutes.js', './src/routes/authRoutes.js'],
-};
-
-const swaggerSpec = swaggerJsdoc(options);
-
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-
-// Route utama
-app.use('/api', pegawaiRoutes);
-app.use('/auth', authRoutes);
-
-// Start server
-app.listen(PORT, () => {
-  console.log(`🚀 Server berjalan di http://localhost:${PORT}`);
+// Error handler
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({
+    message: 'Terjadi kesalahan pada server',
+    error: process.env.NODE_ENV === 'production' ? {} : err
+  });
 });
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
