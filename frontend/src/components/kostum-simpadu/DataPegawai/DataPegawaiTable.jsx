@@ -1,31 +1,48 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect, useContext } from 'react';
 import { DataGrid } from '@/components/data-grid';
 import { Input } from '@/components/ui/input';
 import ModalTambahPegawai from '../DataPegawai/ModalTambahPegawai';
 import ModalEditPegawai from '../DataPegawai/ModalEditPegawai';
-import ModalHapusPegawai from '../DataPegawai/ModalHapusPegawai'; 
+import ModalHapusPegawai from '../DataPegawai/ModalHapusPegawai';
+import { AuthContext } from '@/auth/providers/JWTProvider';
+import axios from 'axios';
 
 const DataPegawaiTable = () => {
   const [search, setSearch] = useState('');
-  const [showModal, setShowModal] = useState(false); // Kontrol modal tambah
-  const [showModalEdit, setShowModalEdit] = useState(false); // Kontrol modal edit
-  const [showModalHapus, setShowModalHapus] = useState(false); // Kontrol modal hapus
-  const [pegawaiTerpilih, setPegawaiTerpilih] = useState(null); // Pegawai yang dipilih untuk edit atau hapus
+  const [showModal, setShowModal] = useState(false);
+  const [showModalEdit, setShowModalEdit] = useState(false);
+  const [showModalHapus, setShowModalHapus] = useState(false);
+  const [pegawaiTerpilih, setPegawaiTerpilih] = useState(null);
+  const [data, setData] = useState([]);
+  const { auth } = useContext(AuthContext);
 
-  const data = useMemo(() => [
-    { id: 1, nama: 'Nama1', nip: '197812312001', jabatan: 'Dosen Tetap', status: 'Aktif' },
-    { id: 2, nama: 'Nama2', nip: '198504152006', jabatan: 'Staf TU', status: 'Aktif' },
-    { id: 3, nama: 'Nama3', nip: '198001012004', jabatan: 'Dosen LB', status: 'Nonaktif' },
-    { id: 4, nama: 'Nama4', nip: '199001252009', jabatan: 'Dosen Tetap', status: 'Aktif' },
-    { id: 5, nama: 'Nama5', nip: '199205202015', jabatan: 'Dosen Tetap', status: 'Aktif' },
-    { id: 6, nama: 'Nama6', nip: '198603302007', jabatan: 'Keuangan', status: 'Aktif' },
-    { id: 7, nama: 'Nama7', nip: '199205202015', jabatan: 'Dosen Tetap', status: 'Aktif' },
-    { id: 8, nama: 'Nama8', nip: '198911282011', jabatan: 'Dosen LB', status: 'Nonaktif' },
-    { id: 9, nama: 'Nama9', nip: '197911122000', jabatan: 'Kepala Prodi', status: 'Aktif' },
-    { id: 10, nama: 'Nama10', nip: '198911282011', jabatan: 'Dosen LB', status: 'Nonaktif' },
-  ], []);
+  useEffect(() => {
+    const fetchPegawai = async () => {
+      try {
+        const res = await axios.get('http://localhost:3000/api/pegawai', {
+          headers: {
+            Authorization: `Bearer ${auth?.token}`,
+          },
+        });
+        // Map data API ke struktur yang diharapkan DataGrid
+        setData(
+          res.data.map((p, idx) => ({
+            id: p.id_pegawai,
+            nama: p.nama_pegawai,
+            nip: p.nip,
+            jabatan: p.jabatan || p.jabatan_struktural || p.status_pegawai || '-',
+            status: p.status_pegawai || '-',
+          }))
+        );
+      } catch (err) {
+        setData([]);
+        // Optional: tampilkan error ke user
+      }
+    };
+    if (auth?.token) fetchPegawai();
+  }, [auth]);
 
-  const filteredData = data.filter(d => d.nama.toLowerCase().includes(search.toLowerCase()));
+  const filteredData = data.filter(d => d.nama?.toLowerCase().includes(search.toLowerCase()));
 
   const columns = [
     {
@@ -45,8 +62,8 @@ const DataPegawaiTable = () => {
           <button
             className="dark:bg-blue-500 dark:text-white dark:hover:bg-blue-700 bg-blue-500 text-white text-xs px-3 py-1.5 rounded hover:bg-blue-700 hover:text-white transition"
             onClick={() => {
-              setPegawaiTerpilih(row.original); // Set pegawai yang dipilih untuk edit (DUMMY DATA UNTUK SEKARANG)
-              setShowModalEdit(true); // Buka modal edit
+              setPegawaiTerpilih(row.original);
+              setShowModalEdit(true);
             }}
           >
             ✏️ Edit
@@ -54,8 +71,8 @@ const DataPegawaiTable = () => {
           <button
             className="dark:bg-red-500 dark:text-white dark:hover:bg-red-700 bg-red-500 text-white text-xs px-3 py-1.5 rounded hover:bg-red-700 hover:text-white transition"
             onClick={() => {
-              setPegawaiTerpilih(row.original); // Set pegawai yang dipilih untuk hapus (DUMMY DATA UNTUK SEKARANG)
-              setShowModalHapus(true); // Buka modal hapus
+              setPegawaiTerpilih(row.original);
+              setShowModalHapus(true);
             }}
           >
             🗑️ Hapus
@@ -76,7 +93,7 @@ const DataPegawaiTable = () => {
         {/* Top bar */}
         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 mb-4">
           <button
-            onClick={() => setShowModal(true)} // Buka modal tambah
+            onClick={() => setShowModal(true)}
             className="w-full sm:w-auto bg-green-500 text-white dark:bg-white dark:text-black 
               dark:hover:bg-green-600 dark:hover:text-white 
               text-sm px-4 py-2 rounded hover:bg-green-600 transition"

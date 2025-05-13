@@ -1,152 +1,178 @@
-const prisma = require('../config/prisma');
+const { PrismaClient } = require('@prisma/client');
 const jwt = require('jsonwebtoken');
+const prisma = new PrismaClient();
 
-const login = async (req, res) => {
-    try {
-        console.log('Request Body:', req.body); // Log body request
-        const {
-            username,
-            password
-        } = req.body;
-
-        if (!username || !password) {
-            return res.status(400).json({
-                message: "Username dan password wajib diisi!"
-            });
-        }
-
-        // Query untuk join tabel users dan user_level
-        const user = await prisma.$queryRaw `
-            SELECT u.*, ul.nama_level 
-            FROM users u
-            JOIN user_level ul ON u.level = ul.id_level
-            WHERE u.username = ${username} AND u.password = ${password}
-        `;
-        console.log('User Found:', user); // Log hasil pencarian user
-
-        if (user.length === 0) {
-            return res.status(401).json({
-                message: "Username atau password salah!"
-            });
-        }
-
-        const foundUser = user[0]; // Ambil user pertama dari hasil query
-
-        // Generate token JWT
-        const token = jwt.sign({
-                userId: foundUser.id_user,
-                level: foundUser.level
-            },
-            process.env.JWT_SECRET, {
-                expiresIn: '1h'
-            }
-        );
-
-        res.status(200).json({
-            message: "Login berhasil!",
-            token: token,
-            user: {
-                id: foundUser.id_user,
-                username: foundUser.username,
-                email: foundUser.email,
-                level: foundUser.nama_level // Nama level dari tabel user_level
-            }
-        });
-    } catch (error) {
-        console.error('Error:', error); // Log error
-        res.status(500).json({
-            message: "Terjadi kesalahan pada server."
-        });
+// Login untuk admin dan pegawai
+exports.login = async (req, res) => {
+  try {
+    const { username, password } = req.body;
+    console.log('Login attempt:', username, password);
+    
+    // Cari user berdasarkan username
+    const user = await prisma.users.findUnique({
+      where: { username }
+    });
+    
+    console.log('User found:', user);
+    
+    if (!user) {
+      return res.status(401).json({ message: 'Username atau password salah' });
     }
+    
+    // Verifikasi password (sebaiknya gunakan bcrypt untuk produksi)
+    if (user.password !== password) {
+      return res.status(401).json({ message: 'Username atau password salah' });
+    }
+    
+    // Cek apakah user aktif
+    if (user.aktif !== 'Y') {
+      return res.status(401).json({ message: 'Akun tidak aktif' });
+    }
+    
+    // Cek apakah user diblokir
+    if (user.blokir === 'Y') {
+      return res.status(401).json({ message: 'Akun diblokir' });
+    }
+    
+    // Cari data pegawai berdasarkan email atau username (NIP)
+   // ... existing code ...
+
+// Cari data pegawai berdasarkan email atau username (NIP)
+let pegawaiData = null;
+
+// Jika user adalah admin atau pegawai biasa
+if (user.level === 1 || user.level === 2) {
+  console.log('Searching pegawai with email:', user.email, 'or nip:', user.username);
+
+  const whereClause = {
+    OR: [
+      { nip: user.username }
+    ]
+  };
+
+  // Add email to the where clause only if it's not null
+  if (user.email) {
+    whereClause.OR.push({ email: user.email });
+  }
+
+  pegawaiData = await prisma.simpeg_pegawai.findFirst({
+    where: whereClause,
+    select: {
+      id_pegawai: true,
+      nip: true,
+      nama_pegawai: true,
+      id_jabatan_struktural: true,
+      id_status_pegawai: true
+    }
+  });
+
+  console.log('Pegawai data found:', pegawaiData);
+
+  if (pegawaiData) {
+    // Ambil data jabatan struktural
+    const jabatan = await prisma.simpeg_jabatan_struktural.findUnique({
+      where: { id_jabatan_struktural: pegawaiData.id_jabatan_struktural }
+    });
+
+    console.log('Jabatan found:', jabatan);
+
+    if (jabatan) {
+      pegawaiData.jabatan = jabatan.nama_jabatan_struktural;
+    }
+
+    // Ambil data status pegawai
+    const statusPegawai = await prisma.simpeg_status_pegawai.findFirst({
+      where: { id_status_pegawai: parseInt(pegawaiData.id_status_pegawai) }
+    });
+
+    console.log('Status pegawai found:', statusPegawai);
+
+    if (statusPegawai) {
+      pegawaiData.status = statusPegawai.nama_status_pegawai;
+    }
+  }
+}
+
+// ... existing code ...
+    
+    // Generate JWT token
+    const token = jwt.sign(
+      { 
+        userId: user.id_user, 
+        role: user.level,
+        pegawaiId: pegawaiData ? pegawaiData.id_pegawai : null
+      },
+      process.env.JWT_SECRET || 'rahasia',
+      { expiresIn: '1d' }
+    );
+    
+    // Buat pesan selamat datang berdasarkan level user
+    let welcomeMessage = 'Login berhasil';
+    if (user.level === 1) {
+      welcomeMessage = 'Selamat login sebagai Admin Pegawai';
+    } else if (user.level === 2) {
+      welcomeMessage = 'Selamat Anda login sebagai Pegawai';
+    }
+    
+    // Kirim response dengan data yang diminta
+    res.json({
+      message: welcomeMessage,
+      token,
+      user: {
+        id: user.id_user,
+        username: user.username,
+        role: user.level,
+        nama: user.nama_lengkap,
+        pegawai: pegawaiData ? {
+          id: pegawaiData.id_pegawai,
+          nip: pegawaiData.nip,
+          nama: pegawaiData.nama_pegawai,
+          jabatan: pegawaiData.jabatan || '',
+          status: pegawaiData.status || ''
+        } : {
+          id: null,
+          nip: user.username,
+          nama: user.nama_lengkap,
+          jabatan: user.level === 1 ? 'Administrator' : 'Pegawai',
+          status: 'Aktif'
+        }
+      }
+    });
+  } catch (error) {
+    console.error('Login error:', error);
+    res.status(500).json({ message: 'Terjadi kesalahan saat login', error: error.message });
+  }
 };
 
-
-const getAllUsers = async (req, res) => {
-    try {
-        // Query untuk mendapatkan semua data pengguna
-        const users = await prisma.users.findMany({
-            include: {
-                levelData: true // Sertakan data dari tabel user_level
-            }
-        });
-
-        if (users.length === 0) {
-            return res.status(404).json({
-                message: "Tidak ada pengguna yang ditemukan!"
-            });
-        }
-
-        res.status(200).json({
-            message: "Daftar pengguna berhasil diambil!",
-            users: users.map(user => ({
-                id: user.id_user,
-                username: user.username,
-                email: user.email,
-                level: user.levelData?.nama_level || "Level tidak ditemukan"
-            }))
-        });
-    } catch (error) {
-        console.error('Error:', error); // Log error
-        res.status(500).json({
-            message: "Terjadi kesalahan pada server."
-        });
+exports.profile = async (req, res) => {
+  try {
+    const userId = req.user.userId;
+    const user = await prisma.users.findUnique({
+      where: { id_user: userId },
+      select: {
+        id_user: true,
+        username: true,
+        nama_lengkap: true,
+        email: true,
+        level: true,
+        aktif: true,
+        blokir: true
+      }
+    });
+    if (!user) {
+      return res.status(404).json({ message: 'User tidak ditemukan' });
     }
-};
-
-
-const getSuperAdminProfile = async (req, res) => {
-    try {
-        const token = req.headers.authorization?.split(" ")[1]; // Ambil token dari header Authorization
-        if (!token) {
-            return res.status(401).json({
-                message: "Token tidak ditemukan, akses ditolak!"
-            });
-        }
-
-        // Verifikasi token JWT
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        const userId = decoded.userId;
-
-        // Query untuk join tabel users, user_level, simpeg_pegawai, dan simpeg_status_pegawai
-        const user = await prisma.$queryRaw`
-            SELECT 
-                u.id_user, 
-                u.username, 
-                u.email, 
-                ul.nama_level, 
-                sp.nama_pegawai, 
-                sp.alamat, 
-                sp.telpon, 
-                ssp.nama_status_pegawai, 
-                ssp.aktif
-            FROM users u
-            JOIN user_level ul ON u.level = ul.id_level
-            LEFT JOIN simpeg_pegawai sp ON u.id_user = sp.id_pegawai
-            LEFT JOIN simpeg_status_pegawai ssp ON sp.id_status_pegawai = ssp.id_status_pegawai
-            WHERE u.id_user = ${userId}
-        `;
-
-        if (user.length === 0) {
-            return res.status(404).json({
-                message: "Profil tidak ditemukan!"
-            });
-        }
-
-        res.status(200).json({
-            message: "Profil berhasil diambil!",
-            profile: user[0] // Ambil data pertama dari hasil query
-        });
-    } catch (error) {
-        console.error("Error:", error);
-        res.status(500).json({
-            message: "Terjadi kesalahan pada server."
-        });
-    }
-};
-
-
-module.exports = {
-    login,
-    getAllUsers,
-    getSuperAdminProfile
+    // Kirim data sesuai kebutuhan frontend
+    res.json({
+      id: user.id_user,
+      username: user.username,
+      nama_lengkap: user.nama_lengkap,
+      email: user.email,
+      role: user.level,
+      aktif: user.aktif,
+      blokir: user.blokir
+    });
+  } catch (error) {
+    res.status(500).json({ message: 'Gagal mengambil profile', error: error.message });
+  }
 };
