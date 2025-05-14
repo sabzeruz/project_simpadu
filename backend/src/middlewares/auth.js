@@ -21,8 +21,8 @@ exports.verifyToken = (req, res, next) => {
 
 // Middleware untuk memeriksa role admin pegawai
 exports.isAdminPegawai = (req, res, next) => {
-  if (req.user.role !== 1) { // Asumsi role 1 adalah admin pegawai
-    return res.status(403).json({ message: 'Akses ditolak. Hanya admin pegawai yang diizinkan.' });
+  if (![99, 102].includes(req.user.role)) {
+    return res.status(403).json({ message: 'Akses ditolak. Hanya Super Admin dan Admin Pegawai yang diizinkan.' });
   }
   next();
 };
