@@ -30,7 +30,8 @@ const DataPegawaiTable = () => {
             id: p.id_pegawai,
             nama: p.nama_pegawai,
             nip: p.nip,
-            jabatan: p.jabatan || p.jabatan_struktural || p.status_pegawai || '-',
+            jabatan_struktural: p.jabatan_struktural || '-', // pastikan backend mengirim field ini
+            jabatan_fungsional: p.jabatan_fungsional || '-', // pastikan backend mengirim field ini
             status: p.status_pegawai || '-',
           }))
         );
@@ -52,7 +53,8 @@ const DataPegawaiTable = () => {
     },
     { accessorKey: 'nama', header: 'Nama' },
     { accessorKey: 'nip', header: 'NIP' },
-    { accessorKey: 'jabatan', header: 'Jabatan' },
+    { accessorKey: 'jabatan_struktural', header: 'Jabatan Struktural' },
+    { accessorKey: 'jabatan_fungsional', header: 'Jabatan Fungsional' },
     { accessorKey: 'status', header: 'Status' },
     {
       accessorKey: 'aksi',
