@@ -121,4 +121,17 @@ const AuthProvider = ({
       {children}
     </AuthContext.Provider>;
 };
+
+// Axios interceptor untuk otomatis kirim token JWT di setiap request
+axios.interceptors.request.use(
+  (config) => {
+    const token = authHelper.getAuth()?.token;
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
 export { AuthContext, AuthProvider };
