@@ -13,7 +13,7 @@ jobs:
       VPS_HOST: ${{ secrets.VPS_HOST }}     # IP VPS
       VPS_PORT: ${{ secrets.VPS_PORT }}     # Port SSH VPS
       VPS_USER: ${{ secrets.VPS_USER }}     # Username SSH
-      VPS_PATH: /var/www/html/frontend      # Path tujuan di VPS (ubah ke folder frontend)
+      VPS_PATH: /var/www/html   # Path tujuan di VPS
 
     steps:
       - name: 📥 Checkout repository
