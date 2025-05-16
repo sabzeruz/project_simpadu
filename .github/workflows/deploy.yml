@@ -41,4 +41,4 @@ jobs:
 
       - name: 🚀 Deploy dist to VPS via rsync
         run: |
-          rsync -e "ssh -i ~/.ssh/id_ed25519 -p $VPS_PORT" -avz --delete ./frontend/dist/ $VPS_USER@$VPS_HOST:$VPS_PATH/
+          rsync -e "ssh -i ~/.ssh/id_ed25519 -p $VPS_PORT" -avz --delete --exclude=".htaccess" ./frontend/dist/ $VPS_USER@$VPS_HOST:$VPS_PATH/
