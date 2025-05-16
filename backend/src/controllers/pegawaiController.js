@@ -5,13 +5,7 @@ const prisma = new PrismaClient();
 exports.getAllPegawai = async (req, res) => {
   try {
     const pegawai = await prisma.simpeg_pegawai.findMany({
-      select: {
-        id_pegawai: true,
-        nama_pegawai: true,
-        nip: true,
-        id_jabatan_struktural: true,
-        id_jabatan_fungsional: true,
-        id_status_pegawai: true,
+      include: {
         simpeg_jabatan_struktural: {
           select: { nama_jabatan_struktural: true }
         },
