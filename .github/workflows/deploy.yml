@@ -3,7 +3,7 @@ name: Deploy Frontend to VPS
 on:
   push:
     branches:
-      - main   # Ganti dengan branch utama kamu jika beda
+      - main   # Ganti jika branch utama kamu bukan 'main'
 
 jobs:
   build-and-deploy:
@@ -11,34 +11,34 @@ jobs:
 
     env:
       VPS_HOST: ${{ secrets.VPS_HOST }}     # IP VPS
-      VPS_PORT: ${{ secrets.VPS_PORT }}     # Port SSH
-      VPS_USER: ${{ secrets.VPS_USER }}     # User VPS
-      VPS_PATH: /var/www/html                # Path tujuan deploy frontend di VPS
+      VPS_PORT: ${{ secrets.VPS_PORT }}     # Port SSH VPS
+      VPS_USER: ${{ secrets.VPS_USER }}     # Username SSH
+      VPS_PATH: /var/www/html/frontend      # Path tujuan di VPS (ubah ke folder frontend)
 
     steps:
-      - name: Checkout repository
+      - name: 📥 Checkout repository
         uses: actions/checkout@v3
 
-      - name: Setup Node.js
+      - name: ⚙️ Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '20'
 
-      - name: Install dependencies (frontend)
+      - name: 📦 Install dependencies (frontend)
         working-directory: ./frontend
         run: npm install
 
-      - name: Build frontend
+      - name: 🛠️ Build frontend
         working-directory: ./frontend
         run: npm run build
 
-      - name: Setup SSH key
+      - name: 🔐 Setup SSH key
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
           ssh-keyscan -p $VPS_PORT $VPS_HOST >> ~/.ssh/known_hosts
 
-      - name: Deploy dist to VPS via rsync
+      - name: 🚀 Deploy dist to VPS via rsync
         run: |
           rsync -e "ssh -i ~/.ssh/id_ed25519 -p $VPS_PORT" -avz --delete ./frontend/dist/ $VPS_USER@$VPS_HOST:$VPS_PATH/
