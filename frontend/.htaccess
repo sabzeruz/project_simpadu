@@ -8,5 +8,5 @@
   RewriteRule ^ - [L]
 
   # Selain itu, arahkan semua ke index.html
-  RewriteRule ^ index.html [L]
+  RewriteRule ^.*$ index.html [L]
 </IfModule>
