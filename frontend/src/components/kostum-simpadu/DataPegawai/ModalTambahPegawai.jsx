@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, MenuItem, Box } from '@mui/material';
-import axios from 'axios';
+import api from '@/utils/axiosInstance';
 import { AuthContext } from '@/auth/providers/JWTProvider';
 
 const ModalTambahPegawai = ({ isOpen, onClose, onAdded }) => {
@@ -21,9 +21,9 @@ const ModalTambahPegawai = ({ isOpen, onClose, onAdded }) => {
     if (!isOpen) return;
     const fetchMaster = async () => {
       const [struktural, fungsional, status] = await Promise.all([
-        axios.get('http://localhost:3000/api/master/jabatan-struktural', { headers: { Authorization: `Bearer ${auth?.token}` } }),
-        axios.get('http://localhost:3000/api/master/jabatan-fungsional', { headers: { Authorization: `Bearer ${auth?.token}` } }),
-        axios.get('http://localhost:3000/api/master/status-pegawai', { headers: { Authorization: `Bearer ${auth?.token}` } }),
+        api.get('/master/jabatan-struktural', { headers: { Authorization: `Bearer ${auth?.token}` } }),
+        api.get('/master/jabatan-fungsional', { headers: { Authorization: `Bearer ${auth?.token}` } }),
+        api.get('/master/status-pegawai', { headers: { Authorization: `Bearer ${auth?.token}` } }),
       ]);
       setListStruktural(struktural.data);
       setListFungsional(fungsional.data);
@@ -39,8 +39,7 @@ const ModalTambahPegawai = ({ isOpen, onClose, onAdded }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(
-        'http://localhost:3000/api/pegawai',
+      await api.post('/pegawai', 
         {
           nama_pegawai: form.nama_pegawai,
           nip: form.nip,
@@ -90,7 +89,8 @@ const ModalTambahPegawai = ({ isOpen, onClose, onAdded }) => {
           no_karpeg: null,
           id_jurusan: null,
           id_prodi: null,
-        }
+        }, 
+        { headers: { Authorization: `Bearer ${auth?.token}` } }
       );
       if (onAdded) onAdded();
       onClose();

@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, MenuItem, Box } from '@mui/material';
 import { AuthContext } from '@/auth/providers/JWTProvider';
-import axios from 'axios';
+import api from '@/utils/axiosInstance'; // gunakan instance axios
 
 const ModalEditPegawai = ({ isOpen, onClose, pegawai, onUpdate }) => {
   const { auth } = useContext(AuthContext);
@@ -21,9 +21,9 @@ const ModalEditPegawai = ({ isOpen, onClose, pegawai, onUpdate }) => {
     if (!isOpen) return;
     const fetchMaster = async () => {
       const [struktural, fungsional, status] = await Promise.all([
-        axios.get('http://localhost:3000/api/master/jabatan-struktural', { headers: { Authorization: `Bearer ${auth?.token}` } }),
-        axios.get('http://localhost:3000/api/master/jabatan-fungsional', { headers: { Authorization: `Bearer ${auth?.token}` } }),
-        axios.get('http://localhost:3000/api/master/status-pegawai', { headers: { Authorization: `Bearer ${auth?.token}` } }),
+        api.get('/master/jabatan-struktural', { headers: { Authorization: `Bearer ${auth?.token}` } }),
+        api.get('/master/jabatan-fungsional', { headers: { Authorization: `Bearer ${auth?.token}` } }),
+        api.get('/master/status-pegawai', { headers: { Authorization: `Bearer ${auth?.token}` } }),
       ]);
       setListStruktural(struktural.data);
       setListFungsional(fungsional.data);
@@ -36,7 +36,7 @@ const ModalEditPegawai = ({ isOpen, onClose, pegawai, onUpdate }) => {
     if (!isOpen || !pegawai?.id) return;
     // Ambil detail pegawai dari API
     const fetchDetail = async () => {
-      const res = await axios.get(`http://localhost:3000/api/pegawai/${pegawai.id}`, {
+      const res = await api.get(`/pegawai/${pegawai.id}`, {
         headers: { Authorization: `Bearer ${auth?.token}` }
       });
       setForm({
