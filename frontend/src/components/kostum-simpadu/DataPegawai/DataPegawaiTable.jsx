@@ -19,7 +19,7 @@ const DataPegawaiTable = () => {
   useEffect(() => {
     const fetchPegawai = async () => {
       try {
-        const res = await axios.get('http://localhost:3000/api/pegawai', {
+        const res = await axios.get('http://36.91.27.150:3001/api/pegawai', {
           headers: {
             Authorization: `Bearer ${auth?.token}`,
           },
