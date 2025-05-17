@@ -5,7 +5,7 @@ import ModalTambahPegawai from '../DataPegawai/ModalTambahPegawai';
 import ModalEditPegawai from '../DataPegawai/ModalEditPegawai';
 import ModalHapusPegawai from '../DataPegawai/ModalHapusPegawai';
 import { AuthContext } from '@/auth/providers/JWTProvider';
-import axios from 'axios';
+import api from '@/utils/axiosInstance';
 
 const DataPegawaiTable = () => {
   const [search, setSearch] = useState('');
@@ -19,7 +19,7 @@ const DataPegawaiTable = () => {
   useEffect(() => {
     const fetchPegawai = async () => {
       try {
-        const res = await axios.get('http://36.91.27.150:3001/api/pegawai', {
+        const res = await api.get('/pegawai', {
           headers: {
             Authorization: `Bearer ${auth?.token}`,
           },
