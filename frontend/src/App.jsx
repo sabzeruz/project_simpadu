@@ -17,6 +17,10 @@ const App = () => {
       createTheme({
         palette: {
           mode: settings.themeMode === 'dark' ? 'dark' : 'light',
+          background: {
+            default: settings.themeMode === 'dark' ? '#181818' : '#fff',
+            paper: settings.themeMode === 'dark' ? '#181818' : '#fff',
+          },
         },
       }),
     [settings.themeMode]
