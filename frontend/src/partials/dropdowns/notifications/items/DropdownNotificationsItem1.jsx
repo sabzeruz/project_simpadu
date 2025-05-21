@@ -2,6 +2,8 @@ import { toAbsoluteUrl } from '@/utils';
 import { Link } from 'react-router-dom';
 import { KeenIcon } from '@/components';
 import { useState } from 'react';
+import { useAuthContext } from '@/auth'; // Tambahkan ini
+
 const DropdownNotificationsItem1 = ({
   userName,
   avatar,
@@ -13,6 +15,8 @@ const DropdownNotificationsItem1 = ({
   text
 }) => {
   const [emailInput, setEmailInput] = useState('');
+  const { currentUser } = useAuthContext(); // Ambil user dari context
+
   return <div className="flex grow gap-2.5 px-5">
       <div className="relative shrink-0 mt-0.5">
         <img src={toAbsoluteUrl(`/media/avatars/${avatar}`)} className="rounded-full size-8" alt={`${userName} avatar`} />
@@ -25,6 +29,12 @@ const DropdownNotificationsItem1 = ({
             <Link to="#" className="hover:text-primary-active text-gray-900 font-semibold">
               {userName}
             </Link>
+            {/* Tambahkan nama_lengkap dan email user di sini */}
+            {currentUser && (
+              <span className="block text-xs text-gray-500">
+                {currentUser.nama_lengkap} &lt;{currentUser.email}&gt;
+              </span>
+            )}
             <span className="text-gray-700"> {description} </span>
             <Link to="#" className="hover:text-primary-active text-primary">
               {link}
@@ -41,7 +51,7 @@ const DropdownNotificationsItem1 = ({
         <div className="card shadow-none flex flex-col gap-2.5 p-3.5 rounded-lg bg-light-active">
           <div className="text-2sm font-semibold text-gray-600 mb-px">
             <Link to="#" className="hover:text-primary-active text-gray-900 font-semibold">
-              @Cody
+              
             </Link>
             <span className="text-gray-700 font-medium"> {text} </span>
           </div>
