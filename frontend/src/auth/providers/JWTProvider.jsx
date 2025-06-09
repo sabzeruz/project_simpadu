@@ -99,6 +99,11 @@ const AuthProvider = ({
     });
   };
   
+  const getPegawai = async () => {
+    const token = authHelper.getAuth()?.token;
+    return await axios.get(`${API_URL}/data-pegawai`, { headers: { Authorization: `Bearer ${token}` } });
+  };
+  
   const logout = () => {
     saveAuth(undefined);
     setCurrentUser(undefined);
@@ -115,6 +120,7 @@ const AuthProvider = ({
     requestPasswordResetLink,
     changePassword,
     getUser,
+    getPegawai,
     logout,
     verify
   }}>

@@ -1,20 +1,16 @@
-import { RecentUploads } from '@/pages/public-profile/profiles/default';
-import { BasicSettings, CalendarAccounts, CommunityBadges, Connections, PersonalInfo, StartNow, Work } from './blocks';
+import {PersonalInfo} from './blocks';
 const AccountUserProfileContent = () => {
-  return <div className="grid grid-cols-1 xl:grid-cols-2 gap-5 lg:gap-7.5">
-      <div className="col-span-1">
-        <div className="grid gap-5 lg:gap-7.5">
-          <PersonalInfo />
-
-          <BasicSettings title="Basic Settings" />
-
-          <Work />
-
-          <CommunityBadges />
+  return (
+    <div className="h-full">
+      <div className="col-span-1 h-full">
+        <div className="grid gap-5 lg:gap-7.5 h-full">
+          <div className="w-full h-full flex flex-col">
+            <PersonalInfo className="flex-1 h-full" />
+          </div>
         </div>
       </div>
 
-      <div className="col-span-1">
+      {/* <div className="col-span-1">
         <div className="grid gap-5 lg:gap-7.5">
           <StartNow />
 
@@ -24,7 +20,8 @@ const AccountUserProfileContent = () => {
 
           <RecentUploads title="My Files" />
         </div>
-      </div>
-    </div>;
+      </div> */}
+    </div>
+  );
 };
 export { AccountUserProfileContent };
