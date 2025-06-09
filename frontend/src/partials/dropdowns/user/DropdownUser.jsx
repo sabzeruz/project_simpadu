@@ -16,7 +16,8 @@ const DropdownUser = ({
     storeSettings
   } = useSettings();
   const {
-    logout
+    logout,
+    currentUser
   } = useAuthContext();
   const {
     isRTL
@@ -33,10 +34,10 @@ const DropdownUser = ({
           <img className="size-9 rounded-full border-2 border-success" src={toAbsoluteUrl('/media/avatars/300-2.png')} alt="" />
           <div className="flex flex-col gap-1.5">
             <Link to="" className="text-sm text-gray-800 hover:text-primary font-semibold leading-none">
-              Cody Fisher
+              {currentUser?.nama_lengkap || '-'}
             </Link>
-            <a href="mailto:c.fisher@gmail.com" className="text-xs text-gray-600 hover:text-primary font-medium leading-none">
-              c.fisher@gmail.com
+            <a href={`mailto:${currentUser?.email || ''}`} className="text-xs text-gray-600 hover:text-primary font-medium leading-none">
+              {currentUser?.email || '-'}
             </a>
           </div>
         </div>

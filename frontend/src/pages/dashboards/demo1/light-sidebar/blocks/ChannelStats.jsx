@@ -3,10 +3,10 @@ import { toAbsoluteUrl } from '@/utils/Assets';
 
 const ChannelStats = () => {
   const items = [
-    { logo: 'user_add.svg', info: '9.3k', desc: 'Iqbal geming', path: '' },
-    { logo: 'user_add.svg', info: '24k', desc: 'Hifni 4 Tak', path: '' },
-    { logo: 'user_add.svg', info: '608', desc: 'Saidi bantai PHP', path: '' },
-    { logo: 'user_add.svg', logoDark: 'user_add.svg', info: '2.5k', desc: 'Cahaya Bintang', path: '' }
+    { logo: 'user_add.svg', info: '9.3k', desc: 'Total Pegawai', path: '' },
+    { logo: 'user_add.svg', info: '24k', desc: 'Total Dosen', path: '' },
+    { logo: 'user_add.svg', info: '608', desc: 'Total Mahasiswa', path: '' },
+    { logo: 'user_add.svg', logoDark: 'user_add.svg', info: '2.5k', desc: 'Total Civitas Akademika Poliban', path: '' }
   ];
 
   const renderItem = (item, index) => {
