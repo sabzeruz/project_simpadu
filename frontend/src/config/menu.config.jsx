@@ -8,10 +8,6 @@ export const MENU_SIDEBAR = [{
   title: 'Data Pegawai',
   path: '/pendataan-pegawai',
   icon: 'ki-filled ki-questionnaire-tablet',
-},  {
-  title: 'Data Dosen',
-  path: '/pendataan-dosen',
-  icon: 'ki-filled ki-badge',
 }, {
   title: 'Presensi',
   icon: 'ki-filled ki-user-edit',

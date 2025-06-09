@@ -15,16 +15,16 @@ const AccountUserProfilePage = () => {
           <Toolbar>
             <ToolbarHeading>
               <ToolbarPageTitle />
-              <ToolbarDescription>Central Hub for Personal Customization</ToolbarDescription>
+              <ToolbarDescription>Data Diri</ToolbarDescription>
             </ToolbarHeading>
-            <ToolbarActions>
+            {/* <ToolbarActions>
               <a href="#" className="btn btn-sm btn-light">
                 Public Profile
               </a>
               <a href="#" className="btn btn-sm btn-primary">
                 Account Settings
               </a>
-            </ToolbarActions>
+            </ToolbarActions> */}
           </Toolbar>
         </Container>}
 
