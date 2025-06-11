@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext, useRef } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import {
   Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, MenuItem, Box, Tabs, Tab, IconButton, InputLabel, Select, FormControl
 } from '@mui/material';
@@ -19,28 +19,52 @@ const jenisKelaminList = [
   { label: 'Perempuan', value: '2' },
 ];
 
+const golDarahList = [
+  { label: 'A', value: 'A' },
+  { label: 'B', value: 'B' },
+  { label: 'AB', value: 'AB' },
+  { label: 'O', value: 'O' },
+];
+
 const ModalTambahPegawai = ({ isOpen, onClose, onAdded }) => {
   const { auth } = useContext(AuthContext);
   const [tab, setTab] = useState('pribadi');
   const [form, setForm] = useState({
-    // id_pegawai: '', // auto increment, tidak perlu diisi manual
     nama_pegawai: '',
     nip: '',
+    jk: '',
+    id_agama: '',
+    tempat_lahir: '',
+    tgl_lahir: '',
+    nidn: '',
+    NUPTK: '',
+    no_ktp: '',
+    no_kk: '',
+    gol_darah: '',
+    id_pendidikan: '',
+    id_status_hidup: '',
+    alamat: '',
+    kota: '',
+    kode_pos: '',
+    id_wil: '',
+    id_kabupaten: '',
+    id_prov: '',
+    handphone: '',
+    email_poliban: '',
     id_jabatan_struktural: '',
     id_jabatan_fungsional: '',
     id_status_pegawai: '',
-    jk: '',
-    id_agama: '',
-    gol_darah: '',
-    tempat_lahir: '',
-    tgl_lahir: '',
-    no_ktp: '',
-    no_kk: '',
-    nidn: '',
-    id_prov: '',
-    id_kabupaten: '',
-    id_wil: '',
-    // ...field lain...
+    id_jurusan: '',
+    id_bagian: '',
+    id_prodi: '',
+    foto: '',
+    riwayat_pangkat: '',
+    riwayat_pendidikan: '',
+    unit_kerja: '',
+    bagian: '',
+    no_hp: '',
+    pendidikan: '',
+    status_hidup: '',
   });
 
   const [foto, setFoto] = useState(null);
@@ -103,22 +127,9 @@ const ModalTambahPegawai = ({ isOpen, onClose, onAdded }) => {
     try {
       // Kirim data pegawai
       const formData = new FormData();
-      formData.append('nama_pegawai', form.nama_pegawai);
-      formData.append('nip', form.nip);
-      formData.append('id_jabatan_struktural', form.id_jabatan_struktural);
-      formData.append('id_jabatan_fungsional', form.id_jabatan_fungsional);
-      formData.append('id_status_pegawai', form.id_status_pegawai);
-      formData.append('jk', form.jk);
-      formData.append('id_agama', form.id_agama);
-      formData.append('gol_darah', form.gol_darah);
-      formData.append('tempat_lahir', form.tempat_lahir);
-      formData.append('tgl_lahir', form.tgl_lahir);
-      formData.append('no_ktp', form.no_ktp);
-      formData.append('no_kk', form.no_kk);
-      formData.append('nidn', form.nidn);
-      formData.append('id_prov', form.id_prov);
-      formData.append('id_kabupaten', form.id_kabupaten);
-      formData.append('id_wil', form.id_wil);
+      Object.entries(form).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) formData.append(key, value);
+      });
       if (foto) formData.append('foto', foto);
 
       await api.post('/pegawai', formData, {
@@ -230,7 +241,7 @@ const ModalTambahPegawai = ({ isOpen, onClose, onAdded }) => {
                   placeholder="Pilih Agama..."
                 >
                   <MenuItem value="">Pilih Agama...</MenuItem>
-                  {/* Map data agama */}
+                  {/* Map data agama jika ada */}
                 </TextField>
                 <TextField
                   select
@@ -243,7 +254,9 @@ const ModalTambahPegawai = ({ isOpen, onClose, onAdded }) => {
                   placeholder="Pilih Golongan Darah..."
                 >
                   <MenuItem value="">Pilih Golongan Darah...</MenuItem>
-                  {/* Map data golongan darah */}
+                  {golDarahList.map(gd => (
+                    <MenuItem key={gd.value} value={gd.value}>{gd.label}</MenuItem>
+                  ))}
                 </TextField>
                 <TextField
                   label="Tempat Lahir"
@@ -291,6 +304,15 @@ const ModalTambahPegawai = ({ isOpen, onClose, onAdded }) => {
                   fullWidth
                   margin="dense"
                   placeholder="Masukkan NIDN..."
+                />
+                <TextField
+                  label="NUPTK"
+                  name="NUPTK"
+                  value={form.NUPTK || ''}
+                  onChange={handleChange}
+                  fullWidth
+                  margin="dense"
+                  placeholder="Masukkan NUPTK..."
                 />
                 <TextField
                   label="NIP"
@@ -360,7 +382,7 @@ const ModalTambahPegawai = ({ isOpen, onClose, onAdded }) => {
                 <Box>Kode Pos</Box>
                 <TextField name="kode_pos" value={form.kode_pos || ''} onChange={handleChange} fullWidth placeholder="Masukkan Kode Pos..." margin="dense" />
                 <Box>No. Handphone</Box>
-                <TextField name="no_hp" value={form.no_hp || ''} onChange={handleChange} fullWidth placeholder="Masukkan No. Handphone..." margin="dense" />
+                <TextField name="handphone" value={form.handphone || ''} onChange={handleChange} fullWidth placeholder="Masukkan No. Handphone..." margin="dense" />
                 <Box>E-mail Poliban</Box>
                 <TextField name="email_poliban" value={form.email_poliban || ''} onChange={handleChange} fullWidth placeholder="Masukkan E-mail Poliban..." margin="dense" />
               </Box>
@@ -371,7 +393,7 @@ const ModalTambahPegawai = ({ isOpen, onClose, onAdded }) => {
               <Box mb={2} fontWeight={600} fontSize="1.1rem">Kepegawaian</Box>
               <Box display="grid" gridTemplateColumns="200px 1fr" gap={2} alignItems="center">
                 <Box>Status Hidup</Box>
-                <TextField select name="status_hidup" value={form.status_hidup || ''} onChange={handleChange} fullWidth margin="dense" placeholder="Pilih Status Hidup...">
+                <TextField select name="id_status_hidup" value={form.id_status_hidup || ''} onChange={handleChange} fullWidth margin="dense" placeholder="Pilih Status Hidup...">
                   <MenuItem value="">Pilih Status Hidup...</MenuItem>
                   <MenuItem value="1">Aktif</MenuItem>
                   <MenuItem value="0">Tidak Aktif</MenuItem>
@@ -407,7 +429,7 @@ const ModalTambahPegawai = ({ isOpen, onClose, onAdded }) => {
               <Box mb={2} fontWeight={600} fontSize="1.1rem">Pendidikan</Box>
               <Box display="grid" gridTemplateColumns="200px 1fr" gap={2} alignItems="center">
                 <Box>Pendidikan</Box>
-                <TextField name="pendidikan" value={form.pendidikan || ''} onChange={handleChange} fullWidth placeholder="Masukkan Pendidikan..." margin="dense" />
+                <TextField name="id_pendidikan" value={form.id_pendidikan || ''} onChange={handleChange} fullWidth placeholder="Masukkan Pendidikan..." margin="dense" />
                 <Box>Riwayat Pendidikan</Box>
                 <TextField name="riwayat_pendidikan" value={form.riwayat_pendidikan || ''} onChange={handleChange} fullWidth placeholder="Masukkan Riwayat Pendidikan..." margin="dense" />
               </Box>
@@ -417,10 +439,12 @@ const ModalTambahPegawai = ({ isOpen, onClose, onAdded }) => {
             <Box>
               <Box mb={2} fontWeight={600} fontSize="1.1rem">Unit</Box>
               <Box display="grid" gridTemplateColumns="200px 1fr" gap={2} alignItems="center">
-                <Box>Unit Kerja</Box>
-                <TextField name="unit_kerja" value={form.unit_kerja || ''} onChange={handleChange} fullWidth placeholder="Masukkan Unit Kerja..." margin="dense" />
+                <Box>Jurusan</Box>
+                <TextField name="id_jurusan" value={form.id_jurusan || ''} onChange={handleChange} fullWidth placeholder="Masukkan Jurusan..." margin="dense" />
                 <Box>Bagian</Box>
-                <TextField name="bagian" value={form.bagian || ''} onChange={handleChange} fullWidth placeholder="Masukkan Bagian..." margin="dense" />
+                <TextField name="id_bagian" value={form.id_bagian || ''} onChange={handleChange} fullWidth placeholder="Masukkan Bagian..." margin="dense" />
+                <Box>Prodi</Box>
+                <TextField name="id_prodi" value={form.id_prodi || ''} onChange={handleChange} fullWidth placeholder="Masukkan Prodi..." margin="dense" />
               </Box>
             </Box>
           )}
