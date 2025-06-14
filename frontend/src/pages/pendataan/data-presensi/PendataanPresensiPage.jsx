@@ -17,7 +17,7 @@ const PendataanPresensiPage = () => {
   return <Fragment>
       <Container>
         <Toolbar>
-          <ToolbarHeading title="Data Pegawai" description="Pendataan Pegawai Politeknik Negeri Banjarmasin saat ini." />
+          <ToolbarHeading title="Data Presensi" description="Pendataan Presensi anda." />
          {/* <ToolbarBreadcrumbs /> */}
         </Toolbar>
             <Container>

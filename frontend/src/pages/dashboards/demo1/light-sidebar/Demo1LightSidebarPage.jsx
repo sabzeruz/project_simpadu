@@ -11,6 +11,7 @@ import { KeenIcon } from '@/components/keenicons';
 import { AuthContext } from '@/auth/providers/JWTProvider';
 import { Breadcrumbs } from '@/layouts/demo1/breadcrumbs';
 import EditAccountRequests from '@/components/kostum-simpadu/Dashboard/EditAccountRequests';
+import JadwalMengajarCard from '@/components/kostum-simpadu/Dashboard/JadwalMengajarCard';
 
 const Demo1LightSidebarPage = () => {
   const { currentUser } = useContext(AuthContext);
@@ -48,11 +49,12 @@ const Demo1LightSidebarPage = () => {
       <Container>
         <Demo1LightSidebarContent />
         <Container className="mt-5">
-          
           {currentUser?.level === 1 && <EditAccountRequests />}
+        < JadwalMengajarCard  />
         </Container>
       </Container>
     </Fragment>
+    
   );
 };
 
