@@ -2,22 +2,26 @@ import jwt from 'jsonwebtoken';
 
 // Middleware untuk verifikasi token
 export const verifyToken = (req, res, next) => {
-  const authHeader = req.headers['authorization'];
-  if (!authHeader) return res.status(401).json({ message: 'Token tidak ditemukan' });
-
+  const authHeader = req.headers.authorization;
+  
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return res.status(401).json({ message: 'Token tidak ditemukan' });
+  }
+  
   const token = authHeader.split(' ')[1];
-  if (!token) return res.status(401).json({ message: 'Token tidak ditemukan' });
-
-  jwt.verify(token, process.env.JWT_SECRET || 'rahasia', (err, user) => {
-    if (err) return res.status(401).json({ message: 'Token tidak valid' });
-    req.user = user;
+  
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = decoded;
     next();
-  });
+  } catch (error) {
+    return res.status(401).json({ message: 'Token tidak valid' });
+  }
 };
 
 // Middleware untuk memeriksa role admin pegawai
 export const isAdminPegawai = (req, res, next) => {
-  if (req.user.role !== 1) { // Asumsi role 1 adalah admin pegawai
+  if (req.user.role !==6) { // Asumsi role 6 dalah admin pegawai
     return res.status(403).json({ message: 'Akses ditolak. Hanya admin pegawai yang diizinkan.' });
   }
   next();
@@ -26,7 +30,7 @@ export const isAdminPegawai = (req, res, next) => {
 
 // Middleware untuk memeriksa role pegawai biasa
 export const isPegawai = (req, res, next) => {
-  if (req.user.role !== 2) {
+  if (req.user.role !== 7) { // Asumsi role 2 adalah pegawai biasa
     return res.status(403).json({ message: 'Akses ditolak. Hanya pegawai yang diizinkan.' });
   }
   next();
@@ -36,7 +40,7 @@ export const isPegawai = (req, res, next) => {
 export const isOwner = (req, res, next) => {
   const pegawaiId = parseInt(req.params.id_pegawai || req.params.id);
 
-  if (req.user.role === 1) {
+  if (req.user.role === 6) {
     // Admin boleh akses semua data
     return next();
   }

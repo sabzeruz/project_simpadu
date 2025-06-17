@@ -3,8 +3,9 @@ import { BrowserRouter } from 'react-router-dom';
 import { useSettings } from '@/providers/SettingsProvider';
 import { AppRouting } from '@/routing';
 import { PathnameProvider } from '@/providers';
-import { Toaster } from '@/components/ui/sonner';
 import { ThemeProvider, createTheme, CssBaseline } from '@mui/material';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const { BASE_URL } = import.meta.env;
 
@@ -42,7 +43,7 @@ const App = () => {
         <PathnameProvider>
           <AppRouting />
         </PathnameProvider>
-        <Toaster />
+        <ToastContainer position="top-right" autoClose={3000} />
       </BrowserRouter>
     </ThemeProvider>
   );

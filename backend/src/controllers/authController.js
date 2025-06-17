@@ -5,196 +5,59 @@ const prisma = new PrismaClient();
 
 // Login untuk admin dan pegawai
 const login = async (req, res) => {
+  const { username, password } = req.body;
+
   try {
-    const { username, password } = req.body;
-    console.log('Login attempt:', username, password);
-    
-    // Cari user berdasarkan username
-    const user = await prisma.users.findUnique({
-      where: { 
-        username: req.body.username.padEnd(35, ' ') // cocokkan dengan CHAR(35)
-       }
+    // Cari user berdasarkan username (pakai findFirst karena username tidak unique di DB)
+    const user = await prisma.users.findFirst({
+      where: { username }
     });
-    
-    console.log('User found:', user);
-    
+
     if (!user) {
-      return res.status(401).json({ message: 'Username atau password salah' });
+      return res.status(401).json({ message: 'Username tidak ditemukan.' });
     }
-    
-    // Verifikasi password (sebaiknya gunakan bcrypt untuk produksi)
+
+    // Cek password (ganti dengan hash compare jika sudah hash)
     if (user.password !== password) {
-      return res.status(401).json({ message: 'Username atau password salah' });
+      return res.status(401).json({ message: 'Password salah.' });
     }
-    
-    // Cek apakah user aktif
-    if (user.aktif !== 'Y') {
-      return res.status(401).json({ message: 'Akun tidak aktif' });
+
+    // Hanya izinkan role 6 (admin pegawai) dan 7 (dosen)
+    if (![6, 7].includes(user.level)) {
+      return res.status(403).json({ message: 'Akses hanya untuk admin pegawai dan dosen.' });
     }
-    
-    // Cek apakah user diblokir
-    if (user.blokir === 'Y') {
-      return res.status(401).json({ message: 'Akun diblokir' });
-    }
-    
-    // Cari data pegawai berdasarkan email atau username (NIP)
-    let pegawaiData = null;
 
-    // Jika user adalah admin atau pegawai biasa
-    if (user.level === 1 || user.level === 2) {
-      console.log('Searching pegawai with email:', user.email, 'or nip:', user.username);
-
-      const whereClause = {
-        OR: [
-          { nip: user.username }
-        ]
-      };
-
-      // Add email to the where clause only if it's not null
-      if (user.email) {
-        whereClause.OR.push({ email_poliban: user.email });
-      }
-
-      pegawaiData = await prisma.simpeg_pegawai.findFirst({
-        where: {
-          OR: [
-            { email_poliban: user.email },
-            { nip: user.username }
-          ]
-        },
-        select: {
-          id_pegawai: true,
-          nama_pegawai: true,
-          nip: true,
-          // Hapus atau ganti field status dengan field yang benar-benar ada
-          jk: true,
-          id_agama: true,
-          tempat_lahir: true,
-          tgl_lahir: true,
-          nidn: true,
-          no_ktp: true,
-          no_kk: true,
-          gol_darah: true,
-          id_pendidikan: true,
-          id_status_hidup: true,
-          alamat: true,
-          kota: true,
-          kode_pos: true,
-          id_wil: true,
-          id_kabupaten: true,
-          id_prov: true,
-          handphone: true,
-          email_poliban: true,
-          id_jabatan_struktural: true,
-          id_jabatan_fungsional: true,
-          // id_riwayat_pangkat: true,
-          // id_riwayat_pendidikan: true,
-          id_status_pegawai: true,
-          id_jurusan: true,
-          id_bagian: true,
-          id_prodi: true,
-          foto: true
-        }
-      });
-      // ... existing code ...
-
-      console.log('Pegawai data found:', pegawaiData);
-
-     // ... existing code ...
-
-if (pegawaiData) {
-  // Pastikan id_status_pegawai tidak undefined dan memiliki nilai
-  if (pegawaiData.id_status_pegawai !== undefined && pegawaiData.id_status_pegawai !== null) {
-    // Ambil data status pegawai
-    const statusPegawai = await prisma.simpeg_status_pegawai.findFirst({
-      where: { id_status_pegawai: parseInt(pegawaiData.id_status_pegawai) }
+    // Cari data pegawai (berdasarkan NIP = username)
+    const pegawaiData = await prisma.simpeg_pegawai.findFirst({
+      where: { nip: user.username }
     });
 
-    console.log('Status pegawai found:', statusPegawai);
-
-    if (statusPegawai) {
-      pegawaiData.status = statusPegawai.nama_status_pegawai;
-    }
-  } else {
-    console.log('id_status_pegawai is undefined or null');
-  }
-}
-    }
-
-// ... existing code ...
-
-// ... existing code ...
-    
-    
-    // Generate JWT token
+    // Buat JWT token
     const token = jwt.sign(
-      { 
-        userId: user.id_user, 
+      {
+        userId: user.id_user,
         role: user.level,
         id_pegawai: pegawaiData ? pegawaiData.id_pegawai : null,
       },
       process.env.JWT_SECRET || 'rahasia',
       { expiresIn: '1d' }
     );
-    
-    // Buat pesan selamat datang berdasarkan level user
-    let welcomeMessage = 'Login berhasil';
-    if (user.level === 1) {
-      welcomeMessage = 'Selamat login sebagai Admin Pegawai';
-    } else if (user.level === 2) {
-      welcomeMessage = 'Selamat Anda login sebagai Pegawai';
-      
-    }
 
-    
-    // Kirim response dengan data yang diminta
     res.json({
-      message: welcomeMessage,
       token,
       user: {
         id_user: user.id_user,
         username: user.username,
-        level: user.level,
         nama_lengkap: user.nama_lengkap,
-        email: user.email,
-        no_telp: user.no_telp,
-        aktif: user.aktif,
-        blokir: user.blokir,
-        ket: user.ket,
-        // Tambahkan ini:
+        level: user.level,
         id_pegawai: pegawaiData ? pegawaiData.id_pegawai : null,
-        // Jika ingin, bisa juga tambahkan seluruh pegawaiData:
-        pegawai: pegawaiData || null
       }
     });
+    console.log('User found:', user);
   } catch (error) {
     console.error('Login error:', error);
-    res.status(500).json({ message: 'Terjadi kesalahan saat login', error: error.message });
+    res.status(500).json({ message: 'Terjadi kesalahan saat login.' });
   }
 };
 
-// Ambil profile user yang sedang login
-const profile = async (req, res) => {
-  try {
-    const user = await prisma.users.findUnique({
-      where: { id_user: req.user.userId }, // atau req.user.id_user, sesuaikan dengan payload JWT
-      select: {
-        id_user: true,
-        username: true,
-        level: true,
-        nama_lengkap: true,
-        email: true,
-        no_telp: true,
-        aktif: true,
-        blokir: true,
-        ket: true
-      }
-    });
-    if (!user) return res.status(404).json({ message: 'User tidak ditemukan' });
-    res.json(user);
-  } catch (error) {
-    res.status(500).json({ message: 'Gagal mengambil profile', error: error.message });
-  }
-};
-
-export default { login, profile };
+export default { login };

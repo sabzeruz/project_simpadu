@@ -5,8 +5,8 @@ export const MENU_SIDEBAR = (currentUser) => [{
 }, {
   heading: 'User'
 }, 
-  // Data Pegawai hanya untuk level 1
-  ...(currentUser?.level === 1 ? [{
+  // Data Pegawai hanya untuk level 6
+  ...(currentUser?.level === 6 ? [{
     title: 'Data Pegawai',
     path: '/pendataan-pegawai',
     icon: 'ki-filled ki-questionnaire-tablet',

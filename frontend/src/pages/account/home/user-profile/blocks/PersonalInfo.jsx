@@ -80,69 +80,9 @@ const PersonalInfo = () => {
               </td>
             </tr>
             <tr>
-              <td className="py-2 text-gray-600 font-normal">ID Pegawai</td>
-              <td className="py-2 text-gray-800 font-normaltext-sm">
-                {pegawai.id_pegawai || '-'}
-              </td>
-              <td className="py-2 text-center">Auto-generated</td>
-            </tr>
-            <tr>
               <td className="py-2 text-gray-600 font-normal">Nama</td>
               <td className="py-2 text-gray-800 font-normaltext-sm">
                 {pegawai.nama_pegawai || '-'}
-              </td>
-              <td className="py-2 text-center">
-                <a href="#" className="btn btn-sm btn-icon btn-clear btn-primary">
-                  <KeenIcon icon="notepad-edit" />
-                </a>
-              </td>
-            </tr>
-            <tr>
-              <td className="py-2 text-gray-600 font-normal">Jenis Kelamin</td>
-              <td className="py-2 text-gray-800 font-normaltext-sm">
-                {GENDER_MAP[pegawai.jk] || '-'}
-              </td>
-              <td className="py-2 text-center"></td>
-            </tr>
-            <tr>
-              <td className="py-2 text-gray-600 font-normal">Agama</td>
-              <td className="py-2 text-gray-800 font-normaltext-sm">
-                {AGAMA_MAP[pegawai.id_agama] || '-'}
-              </td>
-              <td className="py-2 text-center"></td>
-            </tr>
-            <tr>
-              <td className="py-2 text-gray-600 font-normal">Golongan Darah</td>
-              <td className="py-2 text-gray-800 font-normaltext-sm">
-                {GOL_DARAH_MAP[pegawai.gol_darah] || '-'}
-              </td>
-              <td className="py-2 text-center"></td>
-            </tr>
-            <tr>
-              <td className="py-2 text-gray-600 font-normal">Tempat Lahir</td>
-              <td className="py-2 text-gray-800 font-normaltext-sm">
-                {pegawai.tempat_lahir || '-'}
-              </td>
-              <td className="py-2 text-center"></td>
-            </tr>
-            <tr>
-              <td className="py-2 text-gray-600 font-normal">Tanggal Lahir</td>
-              <td className="py-2 text-gray-800 font-normaltext-sm">
-                {tglLahir}
-              </td>
-              <td className="py-2 text-center"></td>
-            </tr>
-            <tr>
-              <td className="py-2 text-gray-600 font-normal">NIK</td>
-              <td className="py-2 text-gray-800 font-normaltext-sm">
-                {pegawai.no_ktp || '-'}
-              </td>
-              <td className="py-2 text-center"></td>
-            </tr>
-            <tr>
-              <td className="py-2 text-gray-600 font-normal">No. KK</td>
-              <td className="py-2 text-gray-800 font-normaltext-sm">
-                {pegawai.no_kk || '-'}
               </td>
               <td className="py-2 text-center"></td>
             </tr>
@@ -161,23 +101,9 @@ const PersonalInfo = () => {
               <td className="py-2 text-center"></td>
             </tr>
             <tr>
-              <td className="py-2 text-gray-600 font-normal">Provinsi</td>
+              <td className="py-2 text-gray-600 font-normal">NUPTK</td>
               <td className="py-2 text-gray-800 font-normaltext-sm">
-                {pegawai.id_prov || '-'}
-              </td>
-              <td className="py-2 text-center"></td>
-            </tr>
-            <tr>
-              <td className="py-2 text-gray-600 font-normal">Kabupaten</td>
-              <td className="py-2 text-gray-800 font-normaltext-sm">
-                {pegawai.id_kabupaten || '-'}
-              </td>
-              <td className="py-2 text-center"></td>
-            </tr>
-            <tr>
-              <td className="py-2 text-gray-600 font-normal">Wilayah</td>
-              <td className="py-2 text-gray-800 font-normaltext-sm">
-                {pegawai.id_wil || '-'}
+                {pegawai.nuptk || '-'}
               </td>
               <td className="py-2 text-center"></td>
             </tr>
@@ -185,91 +111,6 @@ const PersonalInfo = () => {
               <td className="py-2 text-gray-600 font-normal">Alamat</td>
               <td className="py-2 text-gray-800 font-normaltext-sm">
                 {pegawai.alamat || '-'}
-              </td>
-              <td className="py-2 text-center"></td>
-            </tr>
-            <tr>
-              <td className="py-2 text-gray-600 font-normal">Kota</td>
-              <td className="py-2 text-gray-800 font-normaltext-sm">
-                {pegawai.kota || '-'}
-              </td>
-              <td className="py-2 text-center"></td>
-            </tr>
-            <tr>
-              <td className="py-2 text-gray-600 font-normal">Kode Pos</td>
-              <td className="py-2 text-gray-800 font-normaltext-sm">
-                {pegawai.kode_pos || '-'}
-              </td>
-              <td className="py-2 text-center"></td>
-            </tr>
-            <tr>
-              <td className="py-2 text-gray-600 font-normal">No. Handphone</td>
-              <td className="py-2 text-gray-800 font-normaltext-sm">
-                {pegawai.handphone || '-'}
-              </td>
-              <td className="py-2 text-center"></td>
-            </tr>
-            <tr>
-              <td className="py-2 text-gray-600 font-normal">E-mail Poliban</td>
-              <td className="py-2 text-gray-800 font-normaltext-sm">
-                {pegawai.email_poliban || '-'}
-              </td>
-              <td className="py-2 text-center"></td>
-            </tr>
-            <tr>
-              <td className="py-2 text-gray-600 font-normal">Status Hidup</td>
-              <td className="py-2 text-gray-800 font-normaltext-sm">
-                {STATUS_HIDUP_MAP[pegawai.id_status_hidup] || '-'}
-              </td>
-              <td className="py-2 text-center"></td>
-            </tr>
-            <tr>
-              <td className="py-2 text-gray-600 font-normal">Status Pegawai</td>
-              <td className="py-2 text-gray-800 font-normaltext-sm">
-                {STATUS_PEGAWAI_MAP[pegawai.id_status_pegawai] || '-'}
-              </td>
-              <td className="py-2 text-center"></td>
-            </tr>
-            {/* Tambahkan mapping jabatan, pendidikan, jurusan, bagian, prodi jika tersedia */}
-            <tr>
-              <td className="py-2 text-gray-600 font-normal">Jabatan Struktural</td>
-              <td className="py-2 text-gray-800 font-normaltext-sm">
-                {pegawai.id_jabatan_struktural || '-'}
-              </td>
-              <td className="py-2 text-center"></td>
-            </tr>
-            <tr>
-              <td className="py-2 text-gray-600 font-normal">Jabatan Fungsional</td>
-              <td className="py-2 text-gray-800 font-normaltext-sm">
-                {pegawai.id_jabatan_fungsional || '-'}
-              </td>
-              <td className="py-2 text-center"></td>
-            </tr>
-            <tr>
-              <td className="py-2 text-gray-600 font-normal">Pendidikan</td>
-              <td className="py-2 text-gray-800 font-normaltext-sm">
-                {pegawai.id_pendidikan || '-'}
-              </td>
-              <td className="py-2 text-center"></td>
-            </tr>
-            <tr>
-              <td className="py-2 text-gray-600 font-normal">Jurusan</td>
-              <td className="py-2 text-gray-800 font-normaltext-sm">
-                {pegawai.id_jurusan || '-'}
-              </td>
-              <td className="py-2 text-center"></td>
-            </tr>
-            <tr>
-              <td className="py-2 text-gray-600 font-normal">Bagian</td>
-              <td className="py-2 text-gray-800 font-normaltext-sm">
-                {pegawai.id_bagian || '-'}
-              </td>
-              <td className="py-2 text-center"></td>
-            </tr>
-            <tr>
-              <td className="py-2 text-gray-600 font-normal">Prodi</td>
-              <td className="py-2 text-gray-800 font-normaltext-sm">
-                {pegawai.id_prodi || '-'}
               </td>
               <td className="py-2 text-center"></td>
             </tr>

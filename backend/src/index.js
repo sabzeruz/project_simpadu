@@ -3,8 +3,8 @@ import express from 'express';
 import cors from 'cors';
 import authRoutes from './routes/authRoutes.js';
 import pegawaiRoutes from './routes/pegawai.routes.js';
-import absenRoutes from './routes/absenRoutes.js';
-//import pegawaiBiasaRoutes from './routes/pegawaiBiasaRoutes.js';
+import presensiRoutes from './routes/presensiRoutes.js';
+import pegawaiRingkasRouter from './routes/pegawaiRingkasRouter.js';
 // Ensure this path is correct and the file exists
 import swaggerUi from 'swagger-ui-express';
 import fs from 'fs';
@@ -32,7 +32,8 @@ app.use(express.json());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+// Serve folder uploads secara publik
+app.use('/uploads', express.static(path.join(__dirname, 'controllers', 'uploads')));
 
 // Swagger UI
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
@@ -40,8 +41,8 @@ app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/pegawai', pegawaiRoutes);
-//app.use('/api/pegawai', pegawaiBiasaRoutes);
-app.use('/api/absen', absenRoutes);
+app.use('/api/pegawai-ringkas', pegawaiRingkasRouter);
+app.use('/api/presensi', presensiRoutes);
 
 // Error handler
 app.use((err, req, res, next) => {

@@ -16,6 +16,8 @@ import JadwalMengajarCard from '@/components/kostum-simpadu/Dashboard/JadwalMeng
 const Demo1LightSidebarPage = () => {
   const { currentUser } = useContext(AuthContext);
 
+  
+
   // State untuk waktu realtime
   const [now, setNow] = useState(new Date());
 
@@ -34,13 +36,16 @@ const Demo1LightSidebarPage = () => {
       <Container>
         <Toolbar>
           <div>
+            <div>
+              
+            </div>
             <ToolbarHeading title="SIMPADU - Sistem Terpadu" />
             {/* Jam, hari, tanggal di bawah Dashboard */}
             <div className="text-sm text-gray-500 font-semibold mt-4">
               {hari}, {tanggal} — {jam}
             </div>
             <div className="text-sm text-blue-400">
-              Selamat Datang! {currentUser?.nama_lengkap || 'Pengguna'}
+              Selamat Datang! {currentUser?.nama_pegawai || 'Pengguna'}
             </div>
           </div>
           <Breadcrumbs />
@@ -49,7 +54,7 @@ const Demo1LightSidebarPage = () => {
       <Container>
         <Demo1LightSidebarContent />
         <Container className="mt-5">
-          {currentUser?.level === 1 && <EditAccountRequests />}
+          {/* {currentUser?.level === 6 && <EditAccountRequests />} */}
         < JadwalMengajarCard  />
         </Container>
       </Container>

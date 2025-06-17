@@ -9,8 +9,8 @@ export const FORGOT_PASSWORD_URL = `${API_URL}/forgot-password`;
 export const RESET_PASSWORD_URL = `${API_URL}/reset-password`;
 
 
-export const GET_USER_URL = `${API_URL}/auth/profile`;
-export const GET_USER_BY_ID_URL = `${API_URL}/profile/:id`;
+export const GET_USER_URL = `${API_URL}/pegawai/profile/me`;
+export const GET_USER_BY_ID_URL = `${API_URL}/pegawai/profile/id`;
 const AuthContext = createContext(null);
 const AuthProvider = ({
   children
