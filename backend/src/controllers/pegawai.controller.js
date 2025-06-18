@@ -259,6 +259,7 @@ export const deletePegawai = async (req, res) => {
 
     res.json({ message: 'Pegawai berhasil dihapus' });
   } catch (error) {
+    console.error(error); // tambahkan ini untuk debug
     res.status(500).json({
       message: 'Terjadi kesalahan saat menghapus pegawai',
       error: error.message
@@ -335,6 +336,7 @@ export const getAllRingkas = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
 export default {
   getAllPegawai,
   createPegawai,

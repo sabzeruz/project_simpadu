@@ -62,9 +62,14 @@ const Login = () => {
 
         <Alert variant="primary">
           Dalam tahap pengembangan. <br />
-          Username :  <span className="font-semibold text-gray-900">iqbal</span> 
+          Username (Admin Pegawai) :  <span className="font-semibold text-gray-900">197612022002121002</span> 
           <br />{' '}
-          Password : <span className="font-semibold text-gray-900">iqbal</span>
+          Password : <span className="font-semibold text-gray-900">ARIFIN197612022002121002</span>
+          <br />{' '}
+          <br />{' '}
+          Username (Dosen) :  <span className="font-semibold text-gray-900">197508112000121002</span> 
+          <br />{' '}
+          Password : <span className="font-semibold text-gray-900">AGUS197508112000121002</span>
         </Alert>
 
         {formik.status && <Alert variant="danger">{formik.status}</Alert>}

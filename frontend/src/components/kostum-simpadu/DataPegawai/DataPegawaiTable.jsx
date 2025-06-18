@@ -17,29 +17,30 @@ const DataPegawaiTable = () => {
   const [data, setData] = useState([]);
   const { auth } = useContext(AuthContext);
 
+  const fetchPegawai = async () => {
+    try {
+      const res = await api.get('/pegawai/', {
+        headers: {
+          Authorization: `Bearer ${auth?.token}`,
+        },
+      });
+      setData(
+        res.data.map((p) => ({
+          id: p.id_pegawai, // id harus id_pegawai
+          nama_pegawai: p.nama_pegawai,
+          nidn: p.nidn,
+          nip: p.nip,
+          nuptk: p.nuptk,
+          alamat: p.alamat,
+          foto: p.foto,
+        }))
+      );
+    } catch (err) {
+      setData([]);
+    }
+  };
+
   useEffect(() => {
-    const fetchPegawai = async () => {
-      try {
-        const res = await api.get('/pegawai/', {
-          headers: {
-            Authorization: `Bearer ${auth?.token}`,
-          },
-        });
-        setData(
-          res.data.map((p, idx) => ({
-            id: p.id_pegawai,
-            nama_pegawai: p.nama_pegawai,
-            nidn: p.nidn,
-            nip: p.nip,
-            nuptk: p.nuptk,
-            alamat: p.alamat,
-            foto: p.foto,
-          }))
-        );
-      } catch (err) {
-        setData([]);
-      }
-    };
     if (auth?.token) fetchPegawai();
   }, [auth]);
 
