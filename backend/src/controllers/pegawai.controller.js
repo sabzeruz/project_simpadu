@@ -281,6 +281,7 @@ export const getProfilePegawai = async (req, res) => {
     const pegawai = await prisma.simpeg_pegawai.findUnique({
       where: { id_pegawai },
       select: {
+        id_pegawai: true, // tambahkan ini
         nama_pegawai: true,
         nidn: true,
         nip: true,

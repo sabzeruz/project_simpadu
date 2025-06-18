@@ -10,7 +10,7 @@ async function main() {
     create: {
       username: 'admin',
       password: 'admin123', // Sebaiknya hash password di aplikasi nyata
-      level: 1, // Sesuaikan dengan level admin di tabel user_level
+      level: 6, // Sesuaikan dengan level admin di tabel user_level
       nama_lengkap: 'Administrator',
       email: 'admin@example.com',
       aktif: 'Y',
@@ -25,12 +25,12 @@ async function main() {
     create: {
       username: 'pegawai1',
       password: 'pegawai123',
-      level: 2,
+      level: 7,
       nama_lengkap: 'Pegawai Satu',
       email: 'pegawai1@example.com',
       aktif: 'Y',
       blokir: 'N',
-      ref_user: '1' // ID pegawai yang terkait
+     
     },
   });
 

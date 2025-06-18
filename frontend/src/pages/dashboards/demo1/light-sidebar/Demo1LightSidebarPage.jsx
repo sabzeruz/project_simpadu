@@ -12,11 +12,10 @@ import { AuthContext } from '@/auth/providers/JWTProvider';
 import { Breadcrumbs } from '@/layouts/demo1/breadcrumbs';
 import EditAccountRequests from '@/components/kostum-simpadu/Dashboard/EditAccountRequests';
 import JadwalMengajarCard from '@/components/kostum-simpadu/Dashboard/JadwalMengajarCard';
+import AbsenMasukPulang from '@/components/kostum-simpadu/Dashboard/AbsenMasukPulang'; // Tambahkan import ini
 
 const Demo1LightSidebarPage = () => {
   const { currentUser } = useContext(AuthContext);
-
-  
 
   // State untuk waktu realtime
   const [now, setNow] = useState(new Date());
@@ -47,19 +46,21 @@ const Demo1LightSidebarPage = () => {
             <div className="text-sm text-blue-400">
               Selamat Datang! {currentUser?.nama_pegawai || 'Pengguna'}
             </div>
+            {/* Tambahkan komponen AbsenMasukPulang di sini */}
+            
           </div>
           <Breadcrumbs />
         </Toolbar>
+        <AbsenMasukPulang />
       </Container>
       <Container>
         <Demo1LightSidebarContent />
         <Container className="mt-5">
           {/* {currentUser?.level === 6 && <EditAccountRequests />} */}
-        < JadwalMengajarCard  />
+          <JadwalMengajarCard />
         </Container>
       </Container>
     </Fragment>
-    
   );
 };
 

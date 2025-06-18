@@ -6,31 +6,22 @@ export const createPresensi = async (req, res) => {
   try {
     const { id_pegawai, tanggal, status, jam_masuk, jam_keluar } = req.body;
 
-    if (!id_pegawai || !tanggal || !status) {
-      return res.status(400).json({ message: "Data tidak lengkap." });
-    }
+    // LOG
+    console.log('jam_masuk:', jam_masuk, typeof jam_masuk);
 
-    // Pastikan id_pegawai memang ada di tabela simpeg_pegawai
-    const pegawai = await prisma.simpeg_pegawai.findUnique
-    ({ where: { id_pegawai } });
-    if (!pegawai) {
-      return res.status(404).json({ message: "Pegawai tidak ditemukan." });
-    }
-
-    const newPresensi = await prisma.presensi.create({ 
+    const presensi = await prisma.presensi.create({
       data: {
         id_pegawai: Number(id_pegawai),
         tanggal: new Date(tanggal),
         status,
-        jam_masuk: jam_masuk ? new Date(`1970-01-01T${jam_masuk}.000Z`) : null,
-        jam_keluar: jam_keluar ? new Date(`1970-01-01T${jam_keluar}.000Z`) : null,
-      },
+        jam_masuk: jam_masuk || null,     // HANYA INI!
+        jam_keluar: jam_keluar || null,
+      }
     });
 
-    res.status(201).json({ message: "Presensi berhasil disimpan.", presensi: newPresensi });
+    res.status(201).json({ message: 'Presensi berhasil', data: presensi });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Terjadi kesalahan.", error });
+    res.status(500).json({ message: error.message });
   }
 };
 

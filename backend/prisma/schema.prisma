@@ -7,118 +7,15 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model aktivitas_kelas {
-  id_aktivitas_kelas  Int     @id @default(autoincrement())
-  judul_akt_kelas     String? @db.VarChar(100)
-  deskripsi_akt_kelas String? @db.Text
-}
-
-model data_change_requests {
-  id              Int            @id @default(autoincrement())
-  id_pegawai      Int            @db.SmallInt
-  field_name      String
-  current_value   String         @db.Text
-  requested_value String         @db.Text
-  reason          String         @db.Text
-  status          String
-  requested_at    DateTime       @db.DateTime(0)
-  processed_at    DateTime?      @db.DateTime(0)
-  admin_notes     String?        @db.Text
-  simpeg_pegawai  simpeg_pegawai @relation(fields: [id_pegawai], references: [id_pegawai], onDelete: NoAction, onUpdate: NoAction, map: "data_change_requests_ibfk_1")
-
-  @@index([id_pegawai], map: "id_pegawai")
-}
-
-model simpeg_bagian {
-  id_bagian   Int    @id @default(autoincrement()) @db.TinyInt
-  nama_bagian String @db.VarChar(20)
-}
-
-model simpeg_jabatan_fungsional {
-  id_jabatan_fungsional   Int    @id
-  nama_jabatan_fungsional String @db.VarChar(30)
-}
-
-model simpeg_jabatan_struktural {
-  id_jabatan_struktural   Int    @id @default(autoincrement()) @db.SmallInt
-  id_jurusan              Int?
-  nama_jabatan_struktural String @default("") @db.VarChar(100)
-}
-
-model simpeg_level_pendidikan {
-  id_level_pendidikan       Int                         @id @default(autoincrement()) @db.SmallInt
-  nama_level_pendidikan     String                      @db.VarChar(50)
-  simpeg_riwayat_pendidikan simpeg_riwayat_pendidikan[]
-}
-
-model simpeg_pangkat_gol_ruang {
-  id_pangkat_gol_ruang   Int                      @id @default(autoincrement())
-  nama_pangkat_gol_ruang String                   @db.VarChar(50)
-  simpeg_riwayat_pangkat simpeg_riwayat_pangkat[]
-}
-
 model simpeg_pegawai {
-  id_pegawai                Int                         @id @default(autoincrement()) @db.SmallInt
-  nama_pegawai              String                      @db.VarChar(60)
-  nidn                      String                      @db.Char(10)
-  nip                       String                      @db.Char(18)
-  nuptk                     String                      @db.Char(16)
-  alamat                    String?                     @db.VarChar(255)
-  foto                      String?                     @default("blm_ada_foto.jpg") @db.VarChar(255)
-  data_change_requests      data_change_requests[]
-  presensi                  presensi[]
-  simpeg_riwayat_pangkat    simpeg_riwayat_pangkat[]
-  simpeg_riwayat_pendidikan simpeg_riwayat_pendidikan[]
-}
-
-model simpeg_pendanaan {
-  id_pendanaan              Int                         @id @default(autoincrement()) @db.SmallInt
-  pendanaan                 String                      @db.VarChar(50)
-  simpeg_riwayat_pendidikan simpeg_riwayat_pendidikan[]
-}
-
-model simpeg_riwayat_pangkat {
-  id_riwayat_pangkat       Int                      @id @default(autoincrement())
-  id_pegawai               Int                      @db.SmallInt
-  id_pangkat_gol_ruang     Int
-  tmt_pangkat_gol_ruang    DateTime                 @db.Date
-  no_sk                    String                   @db.VarChar(30)
-  tgl_sk                   DateTime                 @db.Date
-  pejabat_penetap          String                   @db.VarChar(50)
-  simpeg_pangkat_gol_ruang simpeg_pangkat_gol_ruang @relation(fields: [id_pangkat_gol_ruang], references: [id_pangkat_gol_ruang], onDelete: NoAction, onUpdate: NoAction, map: "simpeg_riwayat_pangkat_ibfk_2")
-  simpeg_pegawai           simpeg_pegawai           @relation(fields: [id_pegawai], references: [id_pegawai], onDelete: NoAction, onUpdate: NoAction, map: "simpeg_riwayat_pangkat_ibfk_3")
-
-  @@index([id_pangkat_gol_ruang], map: "id_pangkat_gol_ruang")
-  @@index([id_pegawai], map: "id_pegawai")
-}
-
-model simpeg_riwayat_pendidikan {
-  id_riwayat_pendidikan   Int                     @id @default(autoincrement())
-  id_pegawai              Int                     @db.SmallInt
-  id_level_pendidikan     Int                     @db.SmallInt
-  nama_pendidikan         String                  @db.VarChar(100)
-  total_sks               Int
-  ipk                     Decimal                 @db.Decimal(4, 2)
-  fakultas_jurusan_prodi  String                  @db.VarChar(100)
-  tempat                  String                  @db.VarChar(100)
-  nama_pimpinan           String                  @db.VarChar(100)
-  id_pendanaan            Int                     @db.SmallInt
-  id_status               Int                     @db.SmallInt
-  thn_masuk               Int                     @db.Year
-  thn_lulus               Int                     @db.Year
-  simpeg_level_pendidikan simpeg_level_pendidikan @relation(fields: [id_level_pendidikan], references: [id_level_pendidikan], onDelete: NoAction, onUpdate: NoAction, map: "simpeg_riwayat_pendidikan_ibfk_2")
-  simpeg_pendanaan        simpeg_pendanaan        @relation(fields: [id_pendanaan], references: [id_pendanaan], onDelete: NoAction, onUpdate: NoAction, map: "simpeg_riwayat_pendidikan_ibfk_3")
-  simpeg_pegawai          simpeg_pegawai          @relation(fields: [id_pegawai], references: [id_pegawai], onDelete: NoAction, onUpdate: NoAction, map: "simpeg_riwayat_pendidikan_ibfk_5")
-
-  @@index([id_level_pendidikan], map: "id_level_pendidikan")
-  @@index([id_pegawai], map: "id_pegawai")
-  @@index([id_pendanaan], map: "id_pendanaan")
-}
-
-model simpeg_status_pegawai {
-  id_status_pegawai   Int    @id @default(autoincrement()) @db.TinyInt
-  nama_status_pegawai String @default("") @db.VarChar(50)
-  aktif               String @db.Char(1)
+  id_pegawai   Int        @id @default(autoincrement()) @db.SmallInt
+  nama_pegawai String     @db.VarChar(60)
+  nidn         String     @db.Char(10)
+  nip          String     @db.Char(18)
+  nuptk        String     @db.Char(16)
+  alamat       String?    @db.VarChar(255)
+  foto         String?    @default("blm_ada_foto.jpg") @db.VarChar(255)
+  presensi     presensi[]
 }
 
 model user_level {
@@ -129,7 +26,7 @@ model user_level {
 model users {
   id_user      Int          @id @default(autoincrement())
   level        Int          @db.SmallInt
-  username     String       @db.Char(35)
+  username     String       @unique @db.Char(35)
   password     String?      @db.VarChar(100)
   nama_lengkap String?      @db.VarChar(100)
   email        String?      @db.VarChar(100)
@@ -144,8 +41,8 @@ model presensi {
   id_pegawai     Int             @db.SmallInt
   tanggal        DateTime        @db.Date
   status         presensi_status
-  jam_masuk      DateTime?       @db.Time(0)
-  jam_keluar     DateTime?       @db.Time(0)
+  jam_masuk      String?        
+  jam_keluar     String?        
   simpeg_pegawai simpeg_pegawai  @relation(fields: [id_pegawai], references: [id_pegawai], onDelete: NoAction, onUpdate: NoAction, map: "presensi_ibfk_1")
 
   @@index([id_pegawai], map: "id_pegawai")
