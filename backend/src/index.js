@@ -29,7 +29,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Serve folder uploads secara publik
-app.use('/uploads', express.static(path.join(__dirname, 'controllers', 'uploads')));
+app.use('/uploads', express.static(path.join(__dirname, 'controllers/uploads')));
 
 // Swagger UI
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
