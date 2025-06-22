@@ -1,17 +1,22 @@
-export const MENU_SIDEBAR = [{
+export const MENU_SIDEBAR = (currentUser) => [{
   title: 'Dashboard',
   path: '/',
   icon: 'element-11',
 }, {
   heading: 'User'
-}, {
-  title: 'Data Pegawai',
-  path: '/pendataan-pegawai',
-  icon: 'ki-filled ki-questionnaire-tablet',
-}, {
-  title: 'Presensi',
-  icon: 'ki-filled ki-user-edit',
-}];
+}, 
+  // Data Pegawai hanya untuk level 6
+  ...(currentUser?.level === 6 ? [{
+    title: 'Data Pegawai',
+    path: '/pendataan-pegawai',
+    icon: 'ki-filled ki-questionnaire-tablet',
+  }] : []),
+  {
+    title: 'Presensi',
+    icon: 'ki-filled ki-user-edit',
+     path: '/pendataan-presensi',
+  }
+];
 export const MENU_MEGA = [{
   title: 'Home',
   path: '/'

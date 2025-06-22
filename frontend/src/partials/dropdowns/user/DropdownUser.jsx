@@ -29,20 +29,32 @@ const DropdownUser = ({
     });
   };
   const buildHeader = () => {
-    return <div className="flex items-center justify-between px-5 py-1.5 gap-1.5">
+    // Ambil nama file foto user, fallback ke blm_ada_foto.jpg jika kosong/null
+    const fotoFile = currentUser?.foto && currentUser.foto !== ''
+      ? currentUser.foto
+      : 'blm_ada_foto.jpg';
+
+    // Path absolut ke backend (tanpa /api di tengah)
+    const fotoUrl = `${import.meta.env.VITE_APP_API_URL.replace(/\/api$/, '')}/uploads/${fotoFile}`;
+
+    return (
+      <div className="flex items-center justify-between px-5 py-1.5 gap-1.5">
         <div className="flex items-center gap-2">
-          <img className="size-9 rounded-full border-2 border-success" src={toAbsoluteUrl('/media/avatars/300-2.png')} alt="" />
+          <img
+            className="size-9 rounded-full border-2 border-success"
+            src={fotoUrl}
+            alt=""
+            onError={e => { e.target.onerror = null; e.target.src = `${import.meta.env.VITE_APP_API_URL.replace(/\/api$/, '')}/uploads/blm_ada_foto.jpg`; }}
+          />
           <div className="flex flex-col gap-1.5">
             <Link to="" className="text-sm text-gray-800 hover:text-primary font-semibold leading-none">
-              {currentUser?.nama_lengkap || '-'}
+              {currentUser?.nama_pegawai || '-'}
             </Link>
-            <a href={`mailto:${currentUser?.email || ''}`} className="text-xs text-gray-600 hover:text-primary font-medium leading-none">
-              {currentUser?.email || '-'}
-            </a>
           </div>
         </div>
-        <span className="badge badge-xs badge-primary badge-outline">Pro</span>
-      </div>;
+       
+      </div>
+    );
   };
   const buildMenu = () => {
     return <Fragment>

@@ -1,7 +1,7 @@
-const jwt = require('jsonwebtoken');
+import jwt from 'jsonwebtoken';
 
 // Middleware untuk verifikasi token
-exports.verifyToken = (req, res, next) => {
+export const verifyToken = (req, res, next) => {
   const authHeader = req.headers.authorization;
   
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -20,30 +20,35 @@ exports.verifyToken = (req, res, next) => {
 };
 
 // Middleware untuk memeriksa role admin pegawai
-exports.isAdminPegawai = (req, res, next) => {
-  if (![99, 102].includes(req.user.role)) {
-    return res.status(403).json({ message: 'Akses ditolak. Hanya Super Admin dan Admin Pegawai yang diizinkan.' });
+export const isAdminPegawai = (req, res, next) => {
+  if (req.user.role !==6) { // Asumsi role 6 dalah admin pegawai
+    return res.status(403).json({ message: 'Akses ditolak. Hanya admin pegawai yang diizinkan.' });
   }
   next();
 };
 
+
 // Middleware untuk memeriksa role pegawai biasa
-exports.isPegawai = (req, res, next) => {
-  if (req.user.role !== 2) { // Asumsi role 2 adalah pegawai biasa
+export const isPegawai = (req, res, next) => {
+  if (req.user.role !== 7) { // Asumsi role 2 adalah pegawai biasa
     return res.status(403).json({ message: 'Akses ditolak. Hanya pegawai yang diizinkan.' });
   }
   next();
 };
 
 // Middleware untuk memeriksa apakah user adalah pemilik data
-exports.isOwner = (req, res, next) => {
-  const pegawaiId = parseInt(req.params.id);
-  
-  if (req.user.role === 1) { // Admin bisa mengakses semua data
-    next();
-  } else if (req.user.pegawaiId === pegawaiId) { // Pegawai hanya bisa akses datanya sendiri
-    next();
-  } else {
-    return res.status(403).json({ message: 'Akses ditolak. Anda tidak memiliki izin untuk data ini.' });
+export const isOwner = (req, res, next) => {
+  const pegawaiId = parseInt(req.params.id_pegawai || req.params.id);
+
+  if (req.user.role === 6) {
+    // Admin boleh akses semua data
+    return next();
   }
+
+  if (req.user.id_pegawai === pegawaiId) {
+    // Pegawai boleh akses data miliknya sendiri
+    return next();
+  }
+
+  return res.status(403).json({ message: 'Akses ditolak. Anda tidak memiliki izin untuk data ini.' });
 };

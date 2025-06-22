@@ -6,6 +6,7 @@ import ModalEditPegawai from '../DataPegawai/ModalEditPegawai';
 import ModalHapusPegawai from '../DataPegawai/ModalHapusPegawai';
 import { AuthContext } from '@/auth/providers/JWTProvider';
 import api from '@/utils/axiosInstance';
+import { toast } from 'react-toastify';
 
 const DataPegawaiTable = () => {
   const [search, setSearch] = useState('');
@@ -16,46 +17,61 @@ const DataPegawaiTable = () => {
   const [data, setData] = useState([]);
   const { auth } = useContext(AuthContext);
 
+  const fetchPegawai = async () => {
+    try {
+      const res = await api.get('/pegawai/', {
+        headers: {
+          Authorization: `Bearer ${auth?.token}`,
+        },
+      });
+      setData(
+        res.data.map((p) => ({
+          id: p.id_pegawai, // id harus id_pegawai
+          nama_pegawai: p.nama_pegawai,
+          nidn: p.nidn,
+          nip: p.nip,
+          nuptk: p.nuptk,
+          alamat: p.alamat,
+          foto: p.foto,
+        }))
+      );
+    } catch (err) {
+      setData([]);
+    }
+  };
+
   useEffect(() => {
-    const fetchPegawai = async () => {
-      try {
-        const res = await api.get('/pegawai', {
-          headers: {
-            Authorization: `Bearer ${auth?.token}`,
-          },
-        });
-        // Map data API ke struktur yang diharapkan DataGrid
-        setData(
-          res.data.map((p, idx) => ({
-            id: p.id_pegawai,
-            nama: p.nama_pegawai,
-            nip: p.nip,
-            jabatan_struktural: p.jabatan_struktural || '-', // pastikan backend mengirim field ini
-            jabatan_fungsional: p.jabatan_fungsional || '-', // pastikan backend mengirim field ini
-            status: p.status_pegawai || '-',
-          }))
-        );
-      } catch (err) {
-        setData([]);
-        // Optional: tampilkan error ke user
-      }
-    };
     if (auth?.token) fetchPegawai();
   }, [auth]);
 
-  const filteredData = data.filter(d => d.nama?.toLowerCase().includes(search.toLowerCase()));
+  const filteredData = data.filter(d =>
+    d.nama_pegawai?.toLowerCase().includes(search.toLowerCase())
+  );
 
   const columns = [
     {
       accessorKey: 'no',
       header: 'No',
       cell: ({ row }) => row.index + 1,
+    }, {
+      accessorKey: 'foto',
+      header: 'Foto',
+      cell: ({ row }) => {
+        const fotoFile = row.original.foto ? row.original.foto : 'default_profile.png';
+        return (
+          <img
+            src={`${import.meta.env.VITE_APP_API_URL.replace(/\/api$/, '')}/uploads/${fotoFile}`}
+            alt="foto"
+            style={{ width: 40, height: 40, objectFit: 'cover', borderRadius: 4 }}
+          />
+        );
+      },
     },
-    { accessorKey: 'nama', header: 'Nama' },
+    { accessorKey: 'nama_pegawai', header: 'Nama Pegawai' },
+    { accessorKey: 'nidn', header: 'NIDN' },
     { accessorKey: 'nip', header: 'NIP' },
-    { accessorKey: 'jabatan_struktural', header: 'Jabatan Struktural' },
-    { accessorKey: 'jabatan_fungsional', header: 'Jabatan Fungsional' },
-    { accessorKey: 'status', header: 'Status' },
+    { accessorKey: 'nuptk', header: 'NUPTK' },
+    { accessorKey: 'alamat', header: 'Alamat' },
     {
       accessorKey: 'aksi',
       header: 'Aksi',
@@ -84,9 +100,16 @@ const DataPegawaiTable = () => {
     },
   ];
 
-  const handleDelete = (id) => {
-    // TODO: Implementasi fungsi hapus data
-    console.log('Data pegawai dengan ID', id, 'dihapus.');
+  const handleDelete = async (pegawai) => {
+    try {
+      await api.delete(`/pegawai/${pegawai.id}`, {
+        headers: { Authorization: `Bearer ${auth?.token}` }
+      });
+      toast.success('Pegawai berhasil dihapus!');
+      fetchPegawai(); // refresh data
+    } catch (err) {
+      toast.error('Gagal menghapus pegawai!');
+    }
   };
 
   return (

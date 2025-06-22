@@ -18,5 +18,10 @@ export default defineConfig({
   },
   build: {
     chunkSizeWarningLimit: 3000
+  },
+  server: {
+    proxy: {
+      '/api': 'http://localhost:4000', // sesuaikan port backend kamu
+    }
   }
 });
