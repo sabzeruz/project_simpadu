@@ -2,17 +2,13 @@ import { KeenIcon } from '@/components';
 import { CrudAvatarUpload } from '@/partials/crud';
 import { useEffect, useState, useContext } from 'react';
 import { AuthContext } from '@/auth/providers/JWTProvider';
-
-const GENDER_MAP = { 1: 'Laki-laki', 2: 'Perempuan' };
-const GOL_DARAH_MAP = { 1: 'A', 2: 'B', 3: 'AB', 4: 'O' };
-const AGAMA_MAP = { 1: 'Islam', 2: 'Kristen', 3: 'Katolik', 4: 'Hindu', 5: 'Buddha', 6: 'Konghucu' };
-const STATUS_HIDUP_MAP = { 1: 'Hidup', 2: 'Meninggal' };
-const STATUS_PEGAWAI_MAP = { 1: 'PNS', 2: 'PNS Aktif', 3: 'Non PNS' };
-// Map lain bisa ditambah sesuai kebutuhan
+import ModalEditPegawai from '@/components/kostum-simpadu/DataPegawai/ModalEditPegawai';
+import { Button } from '@mui/material';
 
 const PersonalInfo = () => {
   const { currentUser } = useContext(AuthContext);
   const [pegawai, setPegawai] = useState(null);
+  const [openEdit, setOpenEdit] = useState(false);
 
   // Ambil token dari localStorage, handle jika string JWT atau objek JSON
   const tokenRaw = localStorage.getItem('simpadu_project-auth-v1=1.0.0');
@@ -25,6 +21,7 @@ const PersonalInfo = () => {
     }
   }
 
+  // Ambil data pegawai login
   useEffect(() => {
     if (!token) return;
     fetch('/api/pegawai/profile/me', {
@@ -35,14 +32,13 @@ const PersonalInfo = () => {
       .then(async res => {
         if (!res.ok) {
           const text = await res.text();
-          // console.error('API error:', res.status, text); // opsional: hapus juga jika tidak ingin error di console
           throw new Error('API error');
         }
         const data = await res.json();
         setPegawai(data);
       })
       .catch(err => setPegawai(false));
-  }, [currentUser, token]);
+  }, [currentUser, token, openEdit]); // refresh setelah edit
 
   if (!currentUser) return <div>Loading user...</div>;
   if (!token) return <div>Loading token...</div>;
@@ -62,8 +58,16 @@ const PersonalInfo = () => {
 
   return (
     <div className="card min-w-full h-full">
-      <div className="card-header">
+      <div className="card-header flex items-center justify-between">
         <h3 className="card-title">Data Pribadi</h3>
+        <Button
+          variant="contained"
+          color="primary"
+          size="small"
+          onClick={() => setOpenEdit(true)}
+        >
+          Edit
+        </Button>
       </div>
       <div className="card-table scrollable-x-auto pb-3">
         <table className="table align-middle text-sm text-gray-500">
@@ -117,6 +121,13 @@ const PersonalInfo = () => {
           </tbody>
         </table>
       </div>
+      {/* Modal Edit */}
+      <ModalEditPegawai
+        isOpen={openEdit}
+        onClose={() => setOpenEdit(false)}
+        pegawai={{ id: pegawai.id_pegawai, ...pegawai }}
+        onUpdated={() => setOpenEdit(false)}
+      />
     </div>
   );
 };

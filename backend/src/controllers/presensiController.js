@@ -27,7 +27,10 @@ export const createPresensi = async (req, res) => {
 
 export const getAllPresensi = async (req, res) => {
   try {
+    const { id_pegawai } = req.query;
+    const where = id_pegawai ? { id_pegawai: Number(id_pegawai) } : {};
     const presensi = await prisma.presensi.findMany({ 
+      where,
       include: { simpeg_pegawai: true } 
     });
     res.json({ presensi });

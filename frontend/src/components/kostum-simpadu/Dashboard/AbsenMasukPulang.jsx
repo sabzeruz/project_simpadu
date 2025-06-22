@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import api from '@/utils/axiosInstance';
 import { AuthContext } from '@/auth/providers/JWTProvider';
@@ -19,19 +19,48 @@ const AbsenMasukPulang = () => {
   };
 
   // Helper untuk format tanggal (YYYY-MM-DD)
-  const formatTanggal = (date) =>
-    date.toISOString().slice(0, 10);
+  const formatTanggal = (date) => date.toISOString().slice(0, 10);
+
+  // Ambil status presensi hari ini dari database saat komponen mount
+  useEffect(() => {
+    const fetchPresensi = async () => {
+      if (!currentUser?.id_pegawai) return;
+      try {
+        const today = formatTanggal(new Date());
+        const res = await api.get(
+          `/presensi?id_pegawai=${currentUser.id_pegawai}`
+        );
+        // Filter presensi hari ini (untuk check bahwa sudah absen masuk/pulang)
+        const todayMasuk = res.data.presensi.find(
+          (p) => p.tanggal.slice(0, 10) === today && p.status === 'Hadir'
+        );
+        const todayPulang = res.data.presensi.find(
+          (p) => p.tanggal.slice(0, 10) === today && p.status === 'Pulang'
+        );
+        setWaktuMasuk(
+          todayMasuk ? new Date(`${today}T${todayMasuk.jam_masuk}`) : null
+        );
+        setWaktuPulang(
+          todayPulang ? new Date(`${today}T${todayPulang.jam_keluar}`) : null
+        );
+      } catch (err) {
+        setWaktuMasuk(null);
+        setWaktuPulang(null);
+      }
+    };
+    fetchPresensi();
+    // eslint-disable-next-line
+  }, [currentUser]);
 
   const handleAbsenMasuk = async () => {
     if (!currentUser?.id_pegawai) {
-        console.log('currentUser', currentUser);
       toast.error('User tidak valid!');
       return;
     }
     setLoadingMasuk(true);
     const now = new Date();
     try {
-      const res = await api.post('/presensi', {
+      await api.post('/presensi', {
         id_pegawai: currentUser.id_pegawai,
         tanggal: formatTanggal(now),
         status: 'Hadir',
@@ -58,8 +87,7 @@ const AbsenMasukPulang = () => {
     setLoadingPulang(true);
     const now = new Date();
     try {
-      // Kirim status Pulang, jam_keluar diisi, jam_masuk boleh null
-      const res = await api.post('/presensi', {
+      await api.post('/presensi', {
         id_pegawai: currentUser.id_pegawai,
         tanggal: formatTanggal(now),
         status: 'Pulang',
@@ -87,7 +115,10 @@ const AbsenMasukPulang = () => {
         className={`w-1/3 max-w-xs bg-green-500 hover:bg-green-600 text-white font-bold py-5 rounded-lg shadow-md text-lg transition
           ${waktuMasuk || loadingMasuk ? 'opacity-60 cursor-not-allowed' : ''}`}
       >
-        <span role="img" aria-label="masuk">📸</span> Absen Masuk
+        <span role="img" aria-label="masuk">
+          📸
+        </span>{' '}
+        Absen Masuk
         {waktuMasuk && (
           <div className="text-xs mt-2 font-normal">
             Waktu: {formatJam(waktuMasuk)}
@@ -103,7 +134,10 @@ const AbsenMasukPulang = () => {
         className={`w-1/3 max-w-xs bg-blue-600 hover:bg-blue-700 text-white font-bold py-5 rounded-lg shadow-md text-lg transition
           ${waktuPulang || !waktuMasuk || loadingPulang ? 'opacity-60 cursor-not-allowed' : ''}`}
       >
-        <span role="img" aria-label="pulang">🏁</span> Absen Pulang
+        <span role="img" aria-label="pulang">
+          🏁
+        </span>{' '}
+        Absen Pulang
         {waktuPulang && (
           <div className="text-xs mt-2 font-normal">
             Waktu: {formatJam(waktuPulang)}
