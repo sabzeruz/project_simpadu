@@ -121,7 +121,7 @@ const AbsenMasukPulang = () => {
         tanggal: formatTanggal(now),
         status: 'Pulang',
         jam_masuk: null,
-        jam_keluar: toMysqlDatetime(now), // <-- gunakan format MySQL
+        jam_keluar: formatJam(now), // <-- GANTI dari toMysqlDatetime(now) ke formatJam(now)
       });
       setWaktuPulang(now);
       toast.success(`Absen Pulang berhasil! (${formatJam(now)})`);
