@@ -4,7 +4,7 @@ const prisma = new PrismaClient();
 
 export const createPresensi = async (req, res) => {
   try {
-    const { id_pegawai, tanggal, status, jam_masuk, jam_keluar } = req.body;
+    const { id_pegawai, tanggal, status, jam_masuk, jam_keluar, keterangan_izin } = req.body;
 
     // LOG
     console.log('jam_masuk:', jam_masuk, typeof jam_masuk);
@@ -16,6 +16,7 @@ export const createPresensi = async (req, res) => {
         status,
         jam_masuk: jam_masuk || null,     // HANYA INI!
         jam_keluar: jam_keluar || null,
+        keterangan_izin: keterangan_izin || null, // tambahkan ini
       }
     });
 

@@ -26,7 +26,7 @@ model user_level {
 model users {
   id_user      Int          @id @default(autoincrement())
   level        Int          @db.SmallInt
-  username     String       @unique @db.Char(35)
+  username     String       @db.Char(35)
   password     String?      @db.VarChar(100)
   nama_lengkap String?      @db.VarChar(100)
   email        String?      @db.VarChar(100)
@@ -37,13 +37,14 @@ model users {
 }
 
 model presensi {
-  id_presensi    Int             @id @default(autoincrement())
-  id_pegawai     Int             @db.SmallInt
-  tanggal        DateTime        @db.Date
-  status         presensi_status
-  jam_masuk      String?        
-  jam_keluar     String?        
-  simpeg_pegawai simpeg_pegawai  @relation(fields: [id_pegawai], references: [id_pegawai], onDelete: NoAction, onUpdate: NoAction, map: "presensi_ibfk_1")
+  id_presensi     Int             @id @default(autoincrement())
+  id_pegawai      Int             @db.SmallInt
+  tanggal         DateTime        @db.Date
+  status          presensi_status
+  jam_masuk       DateTime?       @db.Time(0)
+  jam_keluar      DateTime?       @db.Time(0)
+  keterangan_izin String?         @db.Text
+  simpeg_pegawai  simpeg_pegawai  @relation(fields: [id_pegawai], references: [id_pegawai], onDelete: NoAction, onUpdate: NoAction, map: "presensi_ibfk_1")
 
   @@index([id_pegawai], map: "id_pegawai")
 }
@@ -53,12 +54,13 @@ enum users_blokir {
   N
 }
 
-enum presensi_status {
-  Hadir
-  Pulang
-}
-
 enum users_aktif {
   Y
   N
+}
+
+enum presensi_status {
+  Hadir
+  Pulang
+  Izin
 }
