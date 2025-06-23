@@ -93,7 +93,7 @@ const AbsenMasukPulang = () => {
         id_pegawai: currentUser.id_pegawai,
         tanggal: formatTanggal(now),
         status: 'Hadir',
-        jam_masuk: toMysqlDatetime(now), // <-- gunakan format MySQL
+        jam_masuk: formatJam(now), // hasil: "15:46:47"
         jam_keluar: null,
       });
       setWaktuMasuk(now);
