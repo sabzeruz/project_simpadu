@@ -28,6 +28,25 @@ const AbsenMasukPulang = () => {
   // Helper untuk format tanggal (YYYY-MM-DD)
   const formatTanggal = (date) => date.toISOString().slice(0, 10);
 
+  // Fungsi untuk mengubah tanggal ke format datetime MySQL
+  function toMysqlDatetime(date) {
+    // date: JS Date object
+    const pad = n => String(n).padStart(2, '0');
+    return (
+      date.getFullYear() +
+      '-' +
+      pad(date.getMonth() + 1) +
+      '-' +
+      pad(date.getDate()) +
+      ' ' +
+      pad(date.getHours()) +
+      ':' +
+      pad(date.getMinutes()) +
+      ':' +
+      pad(date.getSeconds())
+    );
+  }
+
   // Ambil status presensi hari ini dari database saat komponen mount
   useEffect(() => {
     const fetchPresensi = async () => {
@@ -74,7 +93,7 @@ const AbsenMasukPulang = () => {
         id_pegawai: currentUser.id_pegawai,
         tanggal: formatTanggal(now),
         status: 'Hadir',
-        jam_masuk: now.toISOString(), // <-- kirim full ISO string
+        jam_masuk: toMysqlDatetime(now), // <-- gunakan format MySQL
         jam_keluar: null,
       });
       setWaktuMasuk(now);
@@ -102,7 +121,7 @@ const AbsenMasukPulang = () => {
         tanggal: formatTanggal(now),
         status: 'Pulang',
         jam_masuk: null,
-        jam_keluar: now.toISOString(), // <-- kirim full ISO string
+        jam_keluar: toMysqlDatetime(now), // <-- gunakan format MySQL
       });
       setWaktuPulang(now);
       toast.success(`Absen Pulang berhasil! (${formatJam(now)})`);
