@@ -13,14 +13,17 @@ const LogPresensiPulang = () => {
       .get(`/api/presensi?id_pegawai=${currentUser.id_pegawai}`)
       .then((res) => {
         const pulang = res.data.presensi
-          .filter((item) => item.status === "Pulang")
+          .filter((item) => item.status === "Pulang" || item.status === "Izin")
           .map((item, idx) => ({
             id: item.id_presensi,
             tanggal: item.tanggal
               ? new Date(item.tanggal).toLocaleDateString("id-ID")
               : "",
             status: item.status,
-            jamPulang: item.jam_keluar,
+            jamPulang: item.jam_keluar
+              ? new Date(item.jam_keluar).toLocaleTimeString("id-ID", { hour12: false })
+              : "-", // hanya jam
+            keteranganIzin: item.keterangan_izin || "-",
           }));
         setData(pulang);
       })
@@ -32,6 +35,7 @@ const LogPresensiPulang = () => {
     { accessorKey: "tanggal", header: "Tanggal" },
     { accessorKey: "status", header: "Status" },
     { accessorKey: "jamPulang", header: "Jam Pulang" },
+    { accessorKey: "keteranganIzin", header: "Keterangan Izin" }, // Tambah kolom ini
   ];
 
   return (

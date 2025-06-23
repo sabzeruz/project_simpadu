@@ -13,14 +13,17 @@ const LogPresensiMasuk = () => {
       .get(`/api/presensi?id_pegawai=${currentUser.id_pegawai}`)
       .then((res) => {
         const masuk = res.data.presensi
-          .filter((item) => item.status === "Hadir")
+          .filter((item) => item.status === "Hadir" || item.status === "Izin")
           .map((item, idx) => ({
             id: item.id_presensi,
             tanggal: item.tanggal
               ? new Date(item.tanggal).toLocaleDateString("id-ID")
               : "",
             status: item.status,
-            jamMasuk: item.jam_masuk,
+            jamMasuk: item.jam_masuk
+              ? new Date(item.jam_masuk).toLocaleTimeString("id-ID", { hour12: false })
+              : "-", // hanya jam
+            keteranganIzin: item.keterangan_izin || "-",
           }));
         setData(masuk);
       })
@@ -32,6 +35,7 @@ const LogPresensiMasuk = () => {
     { accessorKey: "tanggal", header: "Tanggal" },
     { accessorKey: "status", header: "Status" },
     { accessorKey: "jamMasuk", header: "Jam Masuk" },
+    { accessorKey: "keteranganIzin", header: "Keterangan Izin" }, // Tambah kolom ini
   ];
 
   return (
