@@ -6,9 +6,6 @@ export const createPresensi = async (req, res) => {
   try {
     const { id_pegawai, tanggal, status, jam_masuk, jam_keluar, keterangan_izin } = req.body;
 
-    // LOG
-    console.log('jam_masuk:', jam_masuk, typeof jam_masuk);
-
     const presensi = await prisma.presensi.create({
       data: {
         id_pegawai: Number(id_pegawai),

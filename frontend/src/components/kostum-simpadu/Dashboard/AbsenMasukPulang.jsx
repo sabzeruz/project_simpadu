@@ -47,6 +47,16 @@ const AbsenMasukPulang = () => {
     );
   }
 
+  // Helper untuk gabung tanggal dan jam ke ISO string
+  function combineDateTime(date, timeStr) {
+    // date: JS Date object (tanggal hari ini)
+    // timeStr: "HH:mm:ss"
+    const [h, m, s] = timeStr.split(':');
+    const d = new Date(date);
+    d.setHours(Number(h), Number(m), Number(s), 0);
+    return d.toISOString(); // <-- KIRIM DALAM FORMAT ISO
+  }
+
   // Ambil status presensi hari ini dari database saat komponen mount
   useEffect(() => {
     const fetchPresensi = async () => {
@@ -88,12 +98,13 @@ const AbsenMasukPulang = () => {
     }
     setLoadingMasuk(true);
     const now = new Date();
+    const jamMasuk = combineDateTime(now, formatJam(now));
     try {
       await api.post('/presensi', {
         id_pegawai: currentUser.id_pegawai,
         tanggal: formatTanggal(now),
         status: 'Hadir',
-        jam_masuk: formatJam(now), // hasil: "15:46:47"
+        jam_masuk: jamMasuk, // hasil: "2025-06-24 12:17:54"
         jam_keluar: null,
       });
       setWaktuMasuk(now);
@@ -115,13 +126,14 @@ const AbsenMasukPulang = () => {
     }
     setLoadingPulang(true);
     const now = new Date();
+    const jamKeluar = combineDateTime(now, formatJam(now));
     try {
       await api.post('/presensi', {
         id_pegawai: currentUser.id_pegawai,
         tanggal: formatTanggal(now),
         status: 'Pulang',
         jam_masuk: null,
-        jam_keluar: formatJam(now), // <-- GANTI dari toMysqlDatetime(now) ke formatJam(now)
+        jam_keluar: jamKeluar, // hasil: "2025-06-24 16:30:00"
       });
       setWaktuPulang(now);
       toast.success(`Absen Pulang berhasil! (${formatJam(now)})`);
