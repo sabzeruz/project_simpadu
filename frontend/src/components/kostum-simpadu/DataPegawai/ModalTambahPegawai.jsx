@@ -6,6 +6,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import api from '@/utils/axiosInstance';
 import { AuthContext } from '@/auth/providers/JWTProvider';
 import { toast } from 'react-toastify';
+import MenuItem from '@mui/material/MenuItem';
 
 const ModalTambahPegawai = ({ isOpen, onClose, onAdded }) => {
   const { auth } = useContext(AuthContext);
@@ -15,7 +16,7 @@ const ModalTambahPegawai = ({ isOpen, onClose, onAdded }) => {
     nip: '',
     nuptk: '',
     alamat: '',
-    foto: '',
+    foto: ''
   });
 
   const [foto, setFoto] = useState(null);
@@ -137,6 +138,7 @@ const ModalTambahPegawai = ({ isOpen, onClose, onAdded }) => {
             placeholder="Masukkan Nama Pegawai..."
             required
           />
+
           <TextField
             label="NIDN"
             name="nidn"
