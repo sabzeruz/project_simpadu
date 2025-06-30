@@ -3,7 +3,7 @@ import axios from 'axios';
 import { createContext, useState } from 'react';
 import * as authHelper from '../_helpers';
 const API_URL = import.meta.env.VITE_APP_API_URL;
-export const LOGIN_URL = `${API_URL}/auth/login`;
+export const LOGIN_URL = import.meta.env.VITE_APP_API_LOGIN;
 export const REGISTER_URL = `${API_URL}/register`;
 export const FORGOT_PASSWORD_URL = `${API_URL}/forgot-password`;
 export const RESET_PASSWORD_URL = `${API_URL}/reset-password`;
@@ -45,10 +45,10 @@ const AuthProvider = ({
         username,
         password,
       });
-  
+
       // Simpan token dengan format yang sesuai helper
       saveAuth({ token: data.token });
-  
+
       const { data: user } = await getUser();
       setCurrentUser(user);
     } catch (error) {
@@ -56,8 +56,8 @@ const AuthProvider = ({
       throw new Error(error.response?.data?.message || 'Login gagal');
     }
   };
-  
-  
+
+
   const register = async (email, password, password_confirmation) => {
     try {
       const {
@@ -98,12 +98,12 @@ const AuthProvider = ({
       },
     });
   };
-  
+
   const getPegawai = async () => {
     const token = authHelper.getAuth()?.token;
     return await axios.get(`${API_URL}/data-pegawai`, { headers: { Authorization: `Bearer ${token}` } });
   };
-  
+
   const logout = () => {
     saveAuth(undefined);
     setCurrentUser(undefined);
@@ -124,8 +124,8 @@ const AuthProvider = ({
     logout,
     verify
   }}>
-      {children}
-    </AuthContext.Provider>;
+    {children}
+  </AuthContext.Provider>;
 };
 
 // Axios interceptor untuk otomatis kirim token JWT di setiap request
