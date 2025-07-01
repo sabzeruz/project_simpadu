@@ -5,10 +5,10 @@
     "title": "SIMPADU API",
     "description": "Dokumentasi API SIMPADU"
   },
-  "host": "localhost:4000",
+  "host": "ti054d02.agussbn.my.id",
   "basePath": "/api",
   "schemes": [
-    "http"
+    "https"
   ],
   "paths": {
     "/auth/login": {

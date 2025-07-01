@@ -28,25 +28,6 @@ const AbsenMasukPulang = () => {
   // Helper untuk format tanggal (YYYY-MM-DD)
   const formatTanggal = (date) => date.toISOString().slice(0, 10);
 
-  // Fungsi untuk mengubah tanggal ke format datetime MySQL
-  function toMysqlDatetime(date) {
-    // date: JS Date object
-    const pad = n => String(n).padStart(2, '0');
-    return (
-      date.getFullYear() +
-      '-' +
-      pad(date.getMonth() + 1) +
-      '-' +
-      pad(date.getDate()) +
-      ' ' +
-      pad(date.getHours()) +
-      ':' +
-      pad(date.getMinutes()) +
-      ':' +
-      pad(date.getSeconds())
-    );
-  }
-
   // Helper untuk gabung tanggal dan jam ke ISO string
   function combineDateTime(date, timeStr) {
     // date: JS Date object (tanggal hari ini)
