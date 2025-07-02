@@ -21,7 +21,7 @@ const JadwalMengajarCard = () => {
       try {
         setLoading(true);
         const res = await axios.get(
-          `http://localhost:4000/api/pegawai/proxy-jadwal/${currentUser.id_pegawai}`
+          `https://ti054d02.agussbn.my.id/api/pegawai/proxy-jadwal/${currentUser.id_pegawai}`
         );
         setJadwal(res.data || []);
       } catch {
@@ -36,7 +36,7 @@ const JadwalMengajarCard = () => {
   const handleMulai = async (id_kelas_mk) => {
     setLoadingMulai((prev) => ({ ...prev, [id_kelas_mk]: true }));
     try {
-      await axios.post("http://localhost:4000/api/pegawai/proxy-buka", {
+      await axios.post("https://ti054d02.agussbn.my.id/api/pegawai/proxy-buka", {
         id_pegawai: currentUser.id_pegawai,
         id_kelas_mk,
       });
