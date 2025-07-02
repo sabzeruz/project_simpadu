@@ -3,6 +3,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import express from 'express';
 import fs from 'fs';
+import axios from 'axios';
 import {
   getAllPegawai,
   createPegawai,
@@ -58,4 +59,27 @@ router.delete('/foto-pegawai/:filename', verifyToken, isAdminPegawai, (req, res)
   });
 });
 
+// Proxy endpoint untuk jadwal mengajar dosen
+router.get('/proxy-jadwal/:id', async (req, res) => {
+  try {
+    const response = await axios.get(
+      `https://ti054d01.agussbn.my.id/api/presensi/matkul-dosen/${req.params.id}`
+    );
+    res.json(response.data);
+  } catch (err) {
+    res.status(err.response?.status || 500).json(err.response?.data || { message: 'Proxy error' });
+  }
+});
+router.post('/proxy-buka', async (req, res) => {
+  try {
+    const { id_pegawai, id_kelas_mk } = req.body;
+    const response = await axios.post(
+      'https://ti054d01.agussbn.my.id/api/presensi/buka',
+      { id_pegawai, id_kelas_mk }
+    );
+    res.json(response.data);
+  } catch (err) {
+    res.status(err.response?.status || 500).json(err.response?.data || { message: 'Proxy error' });
+  }
+});
 export default router;

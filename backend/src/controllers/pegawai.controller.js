@@ -109,6 +109,29 @@ export const createPegawai = async (req, res) => {
       data: dataPegawai
     });
 
+    // Ambil data dari request/form
+    const nip = req.body.nip;
+    const nama = req.body.nama_pegawai || '';
+    const role = parseInt(req.body.role) || 7; // default Dosen
+
+    // Buat username dan password sesuai aturan
+    const username = nip;
+    const namaBersih = nama.replace(/\s/g, '').toLowerCase();
+    const password = namaBersih.substring(0, 5) + nip;
+
+    // Insert ke tabel users
+    await prisma.users.create({
+      data: {
+        username,
+        password,
+        nama_lengkap: nama,
+        level: role,
+        aktif: 'Y',      // <-- tambahkan ini
+        blokir: 'N',     // <-- opsional, tambahkan jika ingin default tidak diblokir
+        // email, no_telp, aktif, blokir, ket bisa diisi null/default
+      }
+    });
+
     res.status(201).json({
       message: 'Pegawai berhasil ditambahkan',
       data: Pegawai
