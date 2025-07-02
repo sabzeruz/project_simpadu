@@ -60,14 +60,16 @@ const PersonalInfo = () => {
     <div className="card min-w-full h-full">
       <div className="card-header flex items-center justify-between">
         <h3 className="card-title">Data Pribadi</h3>
-        <Button
-          variant="contained"
-          color="primary"
-          size="small"
-          onClick={() => setOpenEdit(true)}
-        >
-          Edit
-        </Button>
+        {currentUser?.level === 6 && (
+          <Button
+            variant="contained"
+            color="primary"
+            size="small"
+            onClick={() => setOpenEdit(true)}
+          >
+            Edit
+          </Button>
+        )}
       </div>
       <div className="card-table scrollable-x-auto pb-3">
         <table className="table align-middle text-sm text-gray-500">
