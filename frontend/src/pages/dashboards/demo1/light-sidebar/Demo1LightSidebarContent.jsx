@@ -5,9 +5,9 @@ const Demo1LightSidebarContent = () => {
       
     <div className="flex flex-col gap-5 lg:gap-7.5">
       {/* ChannelStats full width */}
-      <div className="w-full">
+      {/* <div className="w-full">
         <ChannelStats />
-      </div>
+      </div> */}
 
       {/* Komponen lain bisa ditaruh di bawah */}
       {/* <EarningsChart /> */}

@@ -147,6 +147,7 @@ const DataPegawaiTable = () => {
       <ModalTambahPegawai
         isOpen={showModal}
         onClose={() => setShowModal(false)}
+        onAdded={fetchPegawai}
       />
 
       {/* Modal Edit Pegawai */}
@@ -154,6 +155,7 @@ const DataPegawaiTable = () => {
         isOpen={showModalEdit}
         onClose={() => setShowModalEdit(false)}
         pegawai={pegawaiTerpilih}
+        onUpdated={fetchPegawai}
       />
 
       {/* Modal Hapus Pegawai */}

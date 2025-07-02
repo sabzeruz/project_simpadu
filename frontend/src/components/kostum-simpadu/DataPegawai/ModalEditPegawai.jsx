@@ -108,7 +108,7 @@ const ModalEditPegawai = ({ isOpen, onClose, pegawai, onUpdated }) => {
         headers: { Authorization: `Bearer ${auth?.token}` }
       });
       toast.success('Pegawai berhasil diupdate!');
-      if (onUpdated) onUpdated();
+      if (onUpdated) onUpdated(); // <-- ini memanggil fetchPegawai dari parent
       onClose();
     } catch (err) {
       toast.error('Gagal mengupdate pegawai: ' + (err.response?.data?.message || err.message));

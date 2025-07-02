@@ -16,7 +16,8 @@ const ModalTambahPegawai = ({ isOpen, onClose, onAdded }) => {
     nip: '',
     nuptk: '',
     alamat: '',
-    foto: ''
+    foto: '',
+    role: 7 // default Dosen
   });
 
   const [foto, setFoto] = useState(null);
@@ -187,6 +188,19 @@ const ModalTambahPegawai = ({ isOpen, onClose, onAdded }) => {
             inputProps={{ maxLength: 255 }}
             rows={3}
           />
+          <TextField
+            select
+            label="Role"
+            name="role"
+            value={form.role || 7}
+            onChange={handleChange}
+            fullWidth
+            margin="dense"
+            required
+          >
+            <MenuItem value={6}>Admin Pegawai</MenuItem>
+            <MenuItem value={7}>Dosen</MenuItem>
+          </TextField>
         </Box>
       </DialogContent>
       <DialogActions sx={{ px: 4, pb: 3, justifyContent: 'flex-end' }}>
