@@ -69,7 +69,7 @@ const JadwalMengajarCard = () => {
   };
 
   return (
-    <div className="shadow-sm p-7 bg-transparent rounded-xl mt-8">
+    <div className="shadow-sm p-7 bg-transparent rounded-xl">
       <ToastContainer />
       <div className="flex items-center mb-4 text-blue-600 dark:text-blue-400 font-semibold text-sm">
         <span className="mr-2">ℹ️</span> Jadwal Mata Kuliah

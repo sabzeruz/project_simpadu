@@ -55,7 +55,7 @@ const Demo1LightSidebarPage = () => {
       </Container>
       <Container>
         <Demo1LightSidebarContent />
-        <Container className="mt-5">
+        <Container>
           {/* {currentUser?.level === 6 && <EditAccountRequests />} */}
           <JadwalMengajarCard />
         </Container>
